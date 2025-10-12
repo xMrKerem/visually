@@ -33,7 +33,7 @@ Küçük ve modüler bir Discord botu. Komutlar `komutlar/`, olay dinleyicileri 
 3. **Ayarları Yap**
    ayarlar.json içinde token, prefix vb. alanları doldur.
 
-4. ""Botu Başalt**
+4. **Botu Başlat**
    ```bash
    node .
    ```
