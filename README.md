@@ -31,9 +31,10 @@ Küçük ve modüler bir Discord botu. Komutlar `komutlar/`, olay dinleyicileri 
    npm install
    ```
 3. **Ayarları Yap**
+   
    ayarlar.json içinde token, prefix vb. alanları doldur.
 
-4. **Botu Başlat**
+5. **Botu Başlat**
    ```bash
    node .
    ```
