@@ -2,6 +2,9 @@
 
 Küçük ve modüler bir Discord botu. Komutlar `komutlar/`, olay dinleyicileri `events/` altında toplanır; giriş noktası `server.js` dosyasıdır. Proje MIT lisansı ile yayınlanmıştır.
 
+> ⚠️ **Not:** Bu bot, **Discord.js v12** sürümü ile geliştirilmiştir.  
+> Yeni Discord.js sürümleri (v13 ve sonrası) bazı komut ve event yapılarında değişiklik içerdiğinden, güncel sürümlerde çalıştırmadan önce kodun uyarlanması gerekebilir.
+
 ---
 
 ## 🚀 Özellikler
