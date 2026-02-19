@@ -69,7 +69,7 @@ module.exports = {
                 messageToSend = `[SİSTEM UYARISI: Şu an senin geliştiricin Görkem (xMrKerem) seninle konuşuyor. Onu tanıdığını belli et ve ona göre samimi/saygılı cevap ver.]\n\nKullanıcı Mesajı: ${userMessage}`;
             }
 
-            const result = await chat.sendMessage(userMessage);
+            const result = await chat.sendMessage(messageToSend);
             const response = result.response.text();
 
             userHistory.history.push({ role: "user", parts: [{ text: userMessage }] });
