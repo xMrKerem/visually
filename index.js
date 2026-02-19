@@ -13,7 +13,7 @@ const colors = {
 
 const bot = new Eris(process.env.TOKEN, {
     intents: ["guilds", "guildMessages", "messageContent", "guildMembers"],
-    getAllUsers: true,
+    getAllUsers: false,
     messageLimit: 100,
     defaultImageFormat: "png",
     defaultImageSize: 1024,
@@ -26,6 +26,8 @@ bot.aliases = new Map();
 bot.prefixCache = new Map();
 
 const loadCommands = () => {
+    let commandsLoaded = false;
+    if (commandsLoaded) return
     const commandsDir = path.join(__dirname, "src", "commands");
     if (!fs.existsSync(commandsDir)) return console.log(`${colors.red}[-] 'src/commands' klasörü bulunamadı!${colors.reset}`);
 
@@ -54,6 +56,7 @@ const loadCommands = () => {
             console.error(`${colors.red}[-] ${file} yüklenirken hata oluştu:${colors.reset} `, err);
         }
     }
+    commandsLoaded = true;
     console.log("-".repeat(30))
 };
 
@@ -92,6 +95,9 @@ process.on("unhandledRejection", (reason, p) => {
 process.on("uncaughtException", (reason, origin) => {
     console.error(`${colors.red}[DEBUG] Unexpected Error:${colors.reset} `, reason);
 });
+
+bot.on("error", (err) => console.error(`${colors.yellow}[Eris Uyarısı] Bağlantı dalgalanması: ${err.message}${colors.reset}`));
+bot.on("disconnect", () => console.log(`${colors.red}[!] Discord bağlantısı koptu, yeniden bağlanılıyor...${colors.reset}`));
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {

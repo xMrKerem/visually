@@ -18,15 +18,17 @@ module.exports = {
 
     execute: async (bot, msgOrInteraction, args, guildData) => {
         const lang = guildData ? guildData.language : "en";
-        const reply = (payload) => msgOrInteraction.createMessage ? msgOrInteraction.createMessage(payload) : bot.createMessage(msgOrInteraction.channel.id, payload);
-        const memoryUsage = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
-        const ping = bot.shards.get(0).latency;
-        const uptimeMs = bot.uptime;
-        const days = Math.floor(uptimeMs / 86400000);
-        const hours = Math.floor(uptimeMs / 3600000) % 24;
-        const minutes = Math.floor(uptimeMs / 60000) % 60;
-        const seconds = Math.floor(uptimeMs / 1000) % 60;
-        const uptimeStr = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        const reply = (payload) => msgOrInteraction.createMessage ? msgOrInteraction.createMessage(payload) : bot.createMessage(msgOrInteraction.channel.id, payload)
+        const memoryUsage = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)
+        const ping = bot.shards.get(0).latency
+        const uptimeMs = bot.uptime
+        const days = Math.floor(uptimeMs / 86400000)
+        const hours = Math.floor(uptimeMs / 3600000) % 24
+        const minutes = Math.floor(uptimeMs / 60000) % 60
+        const seconds = Math.floor(uptimeMs / 1000) % 60
+        const uptimeStr = `${days}d ${hours}h ${minutes}m ${seconds}s`
+        const botUserSize = bot.guilds.reduce((acc, guild) => acc + guild.memberCount, 0)
+
 
         const embed = {
             title: `📊 ${bot.user.username} - ` + translate("STATS_TITLE", lang),
@@ -54,7 +56,7 @@ module.exports = {
                 },
                 {
                     name: "👥 " + translate("STATS_USERS", lang),
-                    value: `**${bot.users.size}**`,
+                    value: `**${botUserSize}**`,
                     inline: true
                 },
                 {

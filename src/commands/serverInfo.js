@@ -23,6 +23,8 @@ module.exports = {
 
         if (!guild) return reply("Sunucu bilgisi alınamadı.");
 
+        await guild.fetchAllMembers()
+
         const owner = guild.members.get(guild.ownerID);
         const ownerTag = owner ? `${owner.username}#${owner.discriminator}` : "Unknown";
         const textChannels = guild.channels.filter(c => c.type === 0).length;

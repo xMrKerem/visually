@@ -108,13 +108,14 @@ Visually is a modern, visual-oriented Discord bot built on the **Eris** library.
 3. **Configure Environment Variables (.env):**
    Create a `.env` file in the root directory and fill in the following:
    ```env
-   TOKEN=your_discord_bot_token
-   MONGO_URI=your_mongodb_connection_string
-   PREFIX=!
+   TOKEN=
+   MONGO_URI=
+   PREFIX=
    IMGUR_API_KEY=
    OPENCAGE_API_KEY=
    OPENWEATHER_API_KEY=
    WEATHERBIT_API_KEY=
+   GEMINI_API_KEY=
    ```
 4. **Start the Bot:**
    ```bash

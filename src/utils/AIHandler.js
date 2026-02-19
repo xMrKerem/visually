@@ -63,6 +63,12 @@ module.exports = {
                 },
             });
 
+            let messageToSend = userMessage;
+
+            if (userId === process.env.OWNER_ID) {
+                messageToSend = `[SİSTEM UYARISI: Şu an senin geliştiricin Görkem (xMrKerem) seninle konuşuyor. Onu tanıdığını belli et ve ona göre samimi/saygılı cevap ver.]\n\nKullanıcı Mesajı: ${userMessage}`;
+            }
+
             const result = await chat.sendMessage(userMessage);
             const response = result.response.text();
 

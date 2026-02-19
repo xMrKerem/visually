@@ -1,5 +1,6 @@
 const registerSlash = require("../utils/RegisterSlash");
 let slashRegistered = false;
+let systemStarted = false;
 
 const colors = {
     green: "\x1b[32m",
@@ -12,6 +13,7 @@ const colors = {
 module.exports = {
     name: "ready",
     execute: async (bot) => {
+        if (systemStarted) return;
         console.log(`${colors.cyan}[+] ${bot.user.username}is ready!${colors.reset}`);
         console.log(`${colors.yellow}[*] Users: ${bot.users.size} | Servers: ${bot.guilds.size}${colors.reset}`);
         console.log("-".repeat(30))
@@ -25,5 +27,6 @@ module.exports = {
             await registerSlash(bot);
             slashRegistered = true;
         }
+        systemStarted = true;
     }
 }
