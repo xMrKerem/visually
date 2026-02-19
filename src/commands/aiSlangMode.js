@@ -1,4 +1,4 @@
-const translate = require("../utils/translate");
+const translate = require("../utils/Translate");
 const en = require("../locales/en.json");
 const tr = require("../locales/tr.json");
 
