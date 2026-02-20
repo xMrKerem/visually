@@ -34,7 +34,7 @@ module.exports = {
         if (!talkedRecently.has(message.author.id)) {
             let user = await User.findOne({ userId: message.author.id });
             if (!user) {
-                user = new User({ userId: message.author.id });
+                user = new User({ userId: message.author.id, userName: message.author.username });
             }
 
             const randomXp = Math.floor(Math.random() * 11) + 10;

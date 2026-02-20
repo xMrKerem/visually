@@ -7,6 +7,12 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
 
+    usernName: {
+        type: String,
+        required: true,
+        default: "undefined"
+    },
+
     balance: {
         type: Number,
         default: 0

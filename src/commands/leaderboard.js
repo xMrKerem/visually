@@ -33,7 +33,10 @@ module.exports = {
                     text: translate("ONLY_GUILD_ERROR", lang)
                 };
 
-                await guild.fetchAllMembers()
+                try {
+                    await guild.fetchAllMembers(2000);
+                } catch(e) {}
+
                 const memberIds = guild.members.map(m => m.id);
                 topUsers = await User.find({ userId: { $in: memberIds } }).sort({ level: -1, xp: -1 }).limit(10);
                 title = translate("LEADERBOARD_SERVER", lang);
@@ -49,24 +52,36 @@ module.exports = {
                 };
             }
 
-            let desc = "";
-            for (let i = 0; i < topUsers.length; i++) {
-                const u = topUsers[i];
-                let medal = "";
+            const promises = topUsers.map(async (u, i) => {
+                let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `**#${i + 1}**`;
+                let displayUsername = u.userId;
 
-                if (i === 0) medal = "🥇";
-                else if (i === 1) medal = "🥈";
-                else if (i === 2) medal = "🥉";
-                else medal = `**#${i + 1}**`;
+                if (u.username && u.username !== "Bilinmeyen" && u.username !== "undefined") {
+                    displayUsername = u.username;
+                } else {
+                    try {
+                        let discordUser = bot.users.get(u.userId);
 
-                let username = u.userId;
-                try {
-                    const discordUser = bot.users.get(u.userId) || await bot.getRESTUser(u.userId);
-                    if (discordUser) username = discordUser.username;
-                } catch (e) {}
+                        if (!discordUser && guild) {
+                            const member = guild.members.get(u.userId);
+                            if (member) discordUser = member.user || member;
+                        }
 
-                desc += `${medal} **${username}** \n└ 🔰 Lvl: **${u.level}**       |       ⚔️ Win: **${u.wins}**\n\n`;
-            }
+                        if (!discordUser) {
+                            discordUser = await bot.getRESTUser(u.userId);
+                        }
+
+                        displayUsername = discordUser ? discordUser.username : `Gizli Kullanıcı (${u.userId})`;
+                    } catch (e) {
+                        displayUsername = `Bilinmeyen (${u.userId})`;
+                    }
+                }
+
+                return `${medal} **${displayUsername}** \n└ 🔰 Lvl: **${u.level}** | ⚔️ Win: **${u.wins}**\n\n`;
+            });
+
+            const results = await Promise.all(promises);
+            const desc = results.join("");
 
             return {
                 embed: {
@@ -110,7 +125,7 @@ module.exports = {
         }
 
         const listener = async (interaction) => {
-            if (!message || interaction.message.id !== message.id) return;
+            if (!message || !interaction.message || interaction.message.id !== message.id) return;
 
             const commandUserId = (msgOrInteraction.member || msgOrInteraction.author || msgOrInteraction.user).id;
             const clickerId = (interaction.member || interaction.user).id;
@@ -127,7 +142,7 @@ module.exports = {
 
             const newData = await generateLeaderboard(newType);
 
-            await bot.editMessage(interaction.channel.id, interaction.message.id, {
+            await interaction.editOriginalMessage({
                 embed: newData.embed,
                 components: components
             });
