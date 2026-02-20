@@ -28,8 +28,12 @@ module.exports = {
                 topUsers = await User.find().sort({ level: -1, xp: -1 }).limit(10);
                 title = translate("LEADERBOARD_GLOBAL", lang);
             } else {
-                if (!guild) return { error: true, text: translate("ONLY_GUILD_ERROR", lang) };
+                if (!guild) return {
+                    error: true,
+                    text: translate("ONLY_GUILD_ERROR", lang)
+                };
 
+                await guild.fetchAllMembers()
                 const memberIds = guild.members.map(m => m.id);
                 topUsers = await User.find({ userId: { $in: memberIds } }).sort({ level: -1, xp: -1 }).limit(10);
                 title = translate("LEADERBOARD_SERVER", lang);
@@ -61,7 +65,7 @@ module.exports = {
                     if (discordUser) username = discordUser.username;
                 } catch (e) {}
 
-                desc += `${medal} **${username}** \n└ 🔰 Lvl: **${u.level}** | ✨ XP: **${u.xp}** | ⚔️ Win: **${u.wins}**\n\n`;
+                desc += `${medal} **${username}** \n└ 🔰 Lvl: **${u.level}**       |       ⚔️ Win: **${u.wins}**\n\n`;
             }
 
             return {
