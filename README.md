@@ -50,6 +50,7 @@ Visually, **Eris** kütüphanesi üzerine inşa edilmiş; modern, çok dilli (TR
    OPENWEATHER_API_KEY=
    WEATHERBIT_API_KEY=
    GEMINI_API_KEY=
+   OWNER_ID
    ```
 4. **Botu başlatın:**
    ```bash
@@ -116,6 +117,7 @@ Visually is a modern, visual-oriented Discord bot built on the **Eris** library.
    OPENWEATHER_API_KEY=
    WEATHERBIT_API_KEY=
    GEMINI_API_KEY=
+   OWNER_ID=
    ```
 4. **Start the Bot:**
    ```bash

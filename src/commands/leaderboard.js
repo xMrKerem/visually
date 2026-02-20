@@ -112,8 +112,10 @@ module.exports = {
         const listener = async (interaction) => {
             if (!message || interaction.message.id !== message.id) return;
 
-            const userId = msgOrInteraction.author ? msgOrInteraction.author.id : msgOrInteraction.member.id;
-            if (interaction.member.id !== userId) {
+            const commandUserId = (msgOrInteraction.member || msgOrInteraction.author || msgOrInteraction.user).id;
+            const clickerId = (interaction.member || interaction.user).id;
+
+            if (clickerId !== commandUserId) {
                 return interaction.createMessage({ content: "Bu menüyü sadece komutu kullanan kişi yönetebilir.", flags: 64 });
             }
 
