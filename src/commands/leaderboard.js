@@ -131,7 +131,7 @@ module.exports = {
             const clickerId = (interaction.member || interaction.user).id;
 
             if (clickerId !== commandUserId) {
-                return interaction.createMessage({ content: "Bu menüyü sadece komutu kullanan kişi yönetebilir.", flags: 64 });
+                return interaction.createMessage({ content: translate("NOT_USER", lang), flags: 64 });
             }
 
             await interaction.deferUpdate();

@@ -42,6 +42,11 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+
+    inventory: {
+        type: Array,
+        default: []
+    }
 });
 
 module.exports = mongoose.model("User", userSchema);

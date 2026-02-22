@@ -148,8 +148,8 @@ module.exports = {
                 }
 
                 const contentText = gameInstance.isFinished
-                    ? translate("DUEL_GAME_OVER", lang, { winner: gameInstance.getPlayer(gameInstance.turn).name })
-                    : translate("DUEL_TURN_MSG", lang, { player: currentPlayer.name, log: logText });
+                    ? translate("DUEL_GAME_OVER", lang, { winner: gameInstance.getPlayer(gameInstance.turn).id })
+                    : translate("DUEL_TURN_MSG", lang, { player: currentPlayer.id, log: logText });
 
                 return {
                     content: contentText,
@@ -191,7 +191,7 @@ module.exports = {
                     const winnerId = result.winner.id;
                     const loserId = (winnerId === p1Data.id) ? p2Data.id : p1Data.id;
 
-                    const prizeCoin = Math.floor(Math.random() * 51) + 50;
+                    const prizeCoin = Math.floor(Math.random() * 101) + 100;
                     const prizeXp = Math.floor(Math.random() * 101) + 100;
 
                     try {

@@ -48,7 +48,7 @@ module.exports = {
             });
         }
 
-        const reward = Math.floor(Math.random() * 201) + 100;
+        const reward = Math.floor(Math.random() * 81) + 70;
 
         user.balance += reward;
         user.lastDaily = now;

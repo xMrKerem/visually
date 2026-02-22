@@ -58,7 +58,7 @@ module.exports = {
             const chat = model.startChat({
                 history: historyForGemini,
                 generationConfig: {
-                    maxOutputTokens: 1000,
+                    maxOutputTokens: 500,
                     temperature: slangMode ? 0.8 : 0.6,
                 },
             });
