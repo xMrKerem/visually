@@ -19,7 +19,7 @@ module.exports = {
         console.log("-".repeat(30))
 
         bot.editStatus("online", {
-            name: `${process.env.PREFIX}help | Visually V2.0 building comming soon...`,
+            name: `${process.env.PREFIX}help | Visually V2.0`,
             type: 3
         });
 
