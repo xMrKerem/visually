@@ -1,4 +1,4 @@
-const StoreItem = require("../database/models/Store");
+const StoreItem = require("../database/models/StoreItem");
 const User = require("../database/models/User");
 const translate = require("../utils/Translate");
 const tr = require("../locales/tr.json");
@@ -37,9 +37,9 @@ module.exports = {
             }
         };
 
-        return reply({
+        /*return reply({
             content: translate("STORE_COMMING_SOON", lang)
-        })
+        })*/
 
         const generateStoreComponents = (currentCategory, currentPage, maxPages, currentItem) => {
             const selectMenuRow = {
@@ -76,6 +76,13 @@ module.exports = {
                             emoji: { name: "🟣" },
                             value: "tech",
                             default: currentCategory === "tech"
+                        },
+                        {
+                            label: translate("STORE_HEAL", lang),
+                            description: translate("STORE_HEAL_DESC", lang),
+                            emoji: { name: "💖" },
+                            value: "heal",
+                            default: currentCategory === "heal"
                         }
                     ]
                 }]
@@ -99,13 +106,55 @@ module.exports = {
         }
 
         const updateStore = async (category, page) => {
-            let embed = { color: 0x2b2d31 };
+            let embed = { color: 0x2b2d31 }
             let currentItem = null;
             let max = 1;
-            const components = generateStoreComponents(category, page, max, currentItem);
 
+            if (category === "main") {
+                embed.title = translate("STORE_MAIN", lang);
+                embed.description = translate("STORE_MAIN_DESC", lang);
+                embed.thumbnail = { url: bot.user.dynamicAvatarURL("png", 256) }
+            } else {
+                const items = await StoreItem.find({ category: category }).sort({ price: 1 })
+                max = items.length > 0 ? items.length : 1
+                currentItem = items[ page - 1 ]
+
+                embed.title = currentItem.emoji + currentItem.name[lang]
+                embed.description = currentItem.description[lang]
+                embed.fields = [
+                    {
+                        name: translate("PRICE", lang),
+                        value: `${currentItem.price} Coin`,
+                        inline: true,
+                    },
+                    {
+                        name: translate("POWER", lang),
+                        value: `**${currentItem.maxPower} - ${currentItem.minPower}**`,
+                        inline: true,
+                    },
+                    {
+                        name: translate("LIMIT", lang),
+                        value: currentItem.usageLimit === -1 ? "**∞**" : `**${currentItem.usageLimit}**`,
+                        inline: true,
+                    }
+                ]
+                embed.image = { url: currentItem.image }
+                embed.footer = { text: `${translate("STORE_FOOTER", lang)} ${page}/${max}` }
+            }
+
+            const components = generateStoreComponents(category, page, max, currentItem);
             return { embed, components, maxPages: max };
         };
+
+        let currentCategory = "main"
+        let currentPage = 1
+        let storeData = await updateStore(currentCategory, currentPage)
+        let maxPages = storeData.maxPages
+
+        const message = await reply({
+            embed: storeData.embed,
+            components: storeData.components
+        })
 
         const listener = async (interaction) => {
             if (!message || !interaction.message || interaction.message.id !== message.id) return
@@ -119,7 +168,54 @@ module.exports = {
                     flags: 64
                 })
             }
+
+            if (interaction.data.custom_id.startsWith("buy_")) {
+                const itemId = interaction.data.custom_id.split("_")[1]
+                const user = await User.findOne({ userId: clickerId })
+                const item = await StoreItem.findOne({ itemId: itemId })
+
+                if (!user || !item) {
+                    return interaction.createMessage({ content: translate("NOT_USER_OR_ITEM", lang), flags: 64 })
+                }
+
+                if (user.balance < item.price) {
+                    return interaction.createMessage({ content: translate("ENOUGH_BALANCE", lang), flags: 64 })
+                }
+
+                const alreadyHas = user.inventory.find(i => i.itemId === item.itemId)
+                if (item.usageLimit === -1 && alreadyHas) {
+                    return interaction.createMessage({ content: translate("ITEM_OWNED", lang), flags: 64 })
+                }
+
+                user.balance -= item.price
+
+                if (alreadyHas) {
+                    alreadyHas.amount += 1
+                } else {
+                    user.inventory.push({
+                        itemId: item.itemId,
+                        name: item.name[lang],
+                        usageLimit: item.usageLimit,
+                        amount: 1
+                    })
+                }
+
+                user.markModified("inventory")
+                await user.save()
+                return interaction.createMessage({ content: translate("SUC", lang), flags: 64 })
+            }
+
             await interaction.deferUpdate()
+
+            if (interaction.data.custom_id.startsWith("STORE_CATEGORY_SELECT")) {
+                currentCategory = interaction.data.values[0]
+                currentPage = 1
+            } else {
+                if (interaction.data.custom_id === "forward") currentPage += 1
+                if (interaction.data.custom_id === "backward") currentPage -= 1
+                if (interaction.data.custom_id === "last") currentPage = maxPages
+                if (interaction.data.custom_id === "first") currentPage = 1
+            }
 
             storeData = await updateStore(currentCategory, currentPage);
             maxPages = storeData.maxPages;

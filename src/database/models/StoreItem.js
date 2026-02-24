@@ -37,7 +37,7 @@ const storeItemSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ["shield", "equip", "tech"]
+        enum: ["shield", "equip", "tech", "heal"]
     },
 
     price: {
@@ -45,14 +45,19 @@ const storeItemSchema = new mongoose.Schema({
         required: true,
     },
 
-    power: {
+    maxPower: {
+        type: Number,
+        required: true,
+    },
+
+    minPower: {
         type: Number,
         required: true,
     },
 
     usageLimit: {
         type: Number,
-        default: 0,
+        default: -1,
     },
 
     emoji: {

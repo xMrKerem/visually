@@ -102,8 +102,17 @@
   "STORE_TECH_TEXT": "You can't be a champion with just basic punches. If you want to learn deadly new techniques, pay up. Which skill shall we unlock? 😎",
   "STORE_CATEGORY_PLACEHOLDER": "Select a category...",
   "STORE_COMMING_SOON": "🛠️ **Duel Store is coming soon!** We are currently stocking the shelves... Stay tuned! 😎",
-  "STORE_PAGE": "Page",
+  "STORE_HEAL": "💖 Potions",
+  "STORE_HEAL_DESC": "Potions you can use to restore your health.",
+  "NOT_USER_OR_ITEM": "❌ An error occurred: User or item not found.",
+  "ENOUGH_BALANCE": "❌ **Insufficient Balance!** You don't have enough coins to buy this item.",
+  "ITEM_OWNED": "❌ **Already Owned!** You cannot buy this item again as it is permanent.",
+  "SUC": "✅ **Success!** The item has been added to your inventory.",
+  "STORE_FOOTER": "Page",
   "BUY": "Buy",
+  "PRICE": "Price",
+  "POWER": "Power",
+  "LIMIT": "Limit",
 
   "CMD_NAME_DAILY": "daily",
   "CMD_DESC_DAILY": "Claim your daily reward.",
@@ -259,5 +268,10 @@
   "CMD_DESC_SLANG": "Enables or disables the bot's slang/casual mode.",
   "INVALID_SLANG_ARG": "❌ Please provide a valid option: `on` or `off`.",
   "SLANG_ENABLED": "😎 **Slang Mode Enabled!** I'll be more casual, chill, and use some slang now.",
-  "SLANG_DISABLED": "🧐 **Slang Mode Disabled.** I will now speak formally and politely."
+  "SLANG_DISABLED": "🧐 **Slang Mode Disabled.** I will now speak formally and politely.",
+
+  "CMD_NAME_INVENTORY": "inventory",
+  "CMD_DESC_INVENTORY": "Shows your items and balance.",
+  "INVENTORY_TITLE": "Inventory",
+  "INVENTORY_EMPTY": "Your bag is empty! It's gathering dust... 🕸️\nGo to the store (`/store`) and buy something."
 }

@@ -58,7 +58,7 @@ module.exports = {
                 label: translate("CAT_USER", lang),
                 description: translate("CAT_USER_DESC", lang),
                 emoji: "👤",
-                commands: ["profile", "stats", "serverinfo", "8ball", "invite", "say", "weather"]
+                commands: ["profile", "stats", "serverinfo", "8ball", "invite", "say", "weather", "store", "help", "inventory"]
             },
             system: {
                 label: translate("CAT_SYS", lang),
