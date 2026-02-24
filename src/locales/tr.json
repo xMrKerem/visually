@@ -89,7 +89,7 @@
   "CMD_NAME_STORE": "market",
   "CMD_DESC_STORE": "Düellolarda rakiplerini ağlatacak eşyaları coin ile satın alabileceğin market.",
   "STORE_MAIN": "🛒 Visually Düello Marketi",
-  "STORE_MAIN_DESC": "Coinlerini harcayarak düellolarda sana büyük avantaj sağlayacak eşyalar alabilirsin. Kategorilere göz atmak için menüyü kullan!",
+  "STORE_MAIN_DESC": "Düellolarda avantaj sağlayacak eşyalar satın al. Kategoriler için menüyü kullan!",
   "STORE_MAIN_TEXT": "Ne bakmıştın? Paran varsa en iyi mallar bende. 😎",
   "STORE_SHIELD": "🛡️ Savunma ve Kalkanlar",
   "STORE_SHIELD_DESC": "Rakibin ağır darbelerinden sağ çıkmanı sağlayacak zırhlar ve enerji kalkanları.",
@@ -102,8 +102,17 @@
   "STORE_TECH_TEXT": "Sadece düz yumrukla şampiyon olunmaz. Yeni ve ölümcül teknikler öğrenmek istiyorsan parayı sökül. Hangi yeteneği açalım? 😎",
   "STORE_CATEGORY_PLACEHOLDER": "Bir kategori seçin...",
   "STORE_COMMING_SOON": "🛠️ **Düello Marketi çok yakında sizlerle!** Şu an arka planda rafları diziyoruz... Beklemede kal! 😎",
-  "STORE_PAGE": "Sayfa",
+  "STORE_HEAL": "💖 İksirler",
+  "STORE_HEAL_DESC": "Canını yenilemek için kullanabileceğin iksirler.",
+  "NOT_USER_OR_ITEM": "❌ Bir hata oluştu: Kullanıcı veya eşya bulunamadı.",
+  "ENOUGH_BALANCE": "❌ **Yetersiz Bakiye!** Bu eşyayı almak için yeterli coinin yok.",
+  "ITEM_OWNED": "❌ **Zaten Sahipsin!** Bu eşya kalıcı olduğu için tekrar satın alamazsın.",
+  "SUC": "✅ **İşlem Başarılı!** Eşya envanterine eklendi.",
+  "STORE_FOOTER": "Sayfa",
   "BUY": "Satın Al",
+  "PRICE": "Fiyat",
+  "POWER": "Güç",
+  "LIMIT": "Limit",
 
   "CMD_NAME_DAILY": "günlük",
   "CMD_DESC_DAILY": "Günlük hediye paranı al.",
@@ -259,5 +268,10 @@
   "CMD_DESC_SLANG": "Botun samimi (argo) modunu açar veya kapatır.",
   "INVALID_SLANG_ARG": "❌ Lütfen geçerli bir seçenek belirtin: `aç` veya `kapat`.",
   "SLANG_ENABLED": "😎 **Argo Modu Açıldı!** Artık daha samimi, rahat ve hafif atarlı konuşacağım. Kemerleri bağla!",
-  "SLANG_DISABLED": "🧐 **Argo Modu Kapatıldı.** Artık daha resmi, kibar ve kurallara uygun konuşacağım."
+  "SLANG_DISABLED": "🧐 **Argo Modu Kapatıldı.** Artık daha resmi, kibar ve kurallara uygun konuşacağım.",
+
+  "CMD_NAME_INVENTORY": "çanta",
+  "CMD_DESC_INVENTORY": "Sahip olduğun eşyaları ve bakiyeni gösterir.",
+  "INVENTORY_TITLE": "Envanteri",
+  "INVENTORY_EMPTY": "Çantan bomboş! Sinek avlıyor... 🕸️\nMarkete gidip (`/store`) bir şeyler satın al."
 }
