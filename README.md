@@ -1,4 +1,3 @@
-cat <<EOF > README.md
 # 🌌 Visually — Advanced Discord Bot
 
 [**Türkçe**](#türkçe) | [**English**](#english)
