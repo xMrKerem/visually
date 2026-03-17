@@ -1,5 +1,5 @@
 const StoreItem = require("../database/models/StoreItem");
-const helper = require("./helper");
+const helper = require("./Helper");
 
 const weightedPick = (items = []) => {
     const total = items.reduce((sum, item) => sum + (item.chance || 0), 0);
