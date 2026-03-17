@@ -280,7 +280,7 @@
   "CAT_WEAPON": "Silah",
   "CAT_SHIELD": "Kalkan",
   "CAT_TECH": "Teknik",
-  "CAT_POTION": "İksir",
+  "CAT_HEAL": "Can",
   "EQUIP_ERR": "❌ Hata: Bu eşya kuşanılamaz türde veya kategorisi hatalı.",
   "EQUIPPED_TITLE": "Kuşanma Başarılı",
   "EQUIP_SUCCESS_DESC": "**{item}** başarıyla **{slot}** slotuna takıldı!",

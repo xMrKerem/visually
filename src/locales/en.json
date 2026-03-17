@@ -280,7 +280,7 @@
   "CAT_WEAPON": "Weapon",
   "CAT_SHIELD": "Shield",
   "CAT_TECH": "Technique",
-  "CAT_POTION": "Potion",
+  "CAT_HEAL": "Heal",
   "EQUIP_ERR": "❌ Error: This item cannot be equipped or has an invalid category.",
   "EQUIPPED_TITLE": "Equipped Successfully",
   "EQUIP_SUCCESS_DESC": "**{item}** successfully equipped to **{slot}** slot!",
