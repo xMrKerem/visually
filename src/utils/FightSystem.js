@@ -1,4 +1,4 @@
-const helper = require('./helper');
+const helper = require('./Helper');
 
 class FightSystem {
     constructor(player1, player2, translate, lang) {
