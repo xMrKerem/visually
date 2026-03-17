@@ -42,6 +42,24 @@ class VisuallyUtils {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    /**
+     * @param {Array} items
+     */
+    static weightRandom(items) {
+        if (!items || !items.length) return null;
+
+        const totalChance = items.reduce((acc, item) => acc + item.chance, 0);
+        let random = Math.random() * totalChance;
+
+        for (const item of items) {
+            if (random < item.chance) {
+                return item;
+            }
+            random -= item.chance;
+        }
+        return items[0];
+    }
+
     static  base64(text, mode = "encode") {
         if (mode === "encode") return Buffer.from(text).toString("base64");
         if (mode === "decode") return Buffer.from(text, "base64").toString("utf8");

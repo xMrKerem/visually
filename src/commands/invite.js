@@ -18,7 +18,7 @@ module.exports = {
     execute: async (bot, msgOrInteraction, args, guildData) => {
         const lang = guildData ? guildData.language : "en";
         const reply = (payload) => msgOrInteraction.createMessage ? msgOrInteraction.createMessage(payload) : bot.createMessage(msgOrInteraction.channel.id, payload);
-        const inviteLink = `https://discord.com/oauth2/authorize?client_id=${bot.user.id}&scope=bot%20applications.commands&permissions=8`;
+        const inviteLink = `https://discord.com/oauth2/authorize?client_id=${bot.user.id}`;
         const supportLink = "https://discord.gg/dAVcz9zK7g";
 
         const embed = {

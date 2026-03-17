@@ -50,7 +50,7 @@ module.exports = {
             talkedRecently.add(message.author.id);
             setTimeout(() => {
                 talkedRecently.delete(message.author.id);
-            }, 60000);
+            }, 15000);
         }
 
         if (message.mentions.find(u => u.id === bot.user.id)) {

@@ -3,6 +3,97 @@ const CanvasUtil = require("../utils/CanvasUtil");
 const translate = require("../utils/Translate");
 const LevelSystem = require("../utils/LevelSystem");
 const User = require("../database/models/User");
+const StoreItem = require("../database/models/StoreItem");
+
+async function getEquippedStats(userId) {
+    let totalStats = {
+        atcMinDmg: 0, atcMaxDmg: 0,
+        spcMinDmg: 0, spcMaxDmg: 0,
+        minHp: 0, maxHp: 0, bonusHp: 0,
+        dmgCritChance: 0.2, spcCritChance: 0.1,
+        dmgMissChance: 0.2, spcMissChance: 0.1,
+        dmgCriticMultiplier: 1.5,
+        defense: 1.3, respawn: false
+    };
+
+    const userDB = await User.findOne({ userId: userId });
+    if (!userDB || !userDB.equipment) return totalStats;
+
+    const equippedIds = Object.values(userDB.equipment).filter(id => id !== null);
+    if (equippedIds.length === 0) return totalStats;
+
+    const items = await StoreItem.find({ itemId: { $in: equippedIds } });
+
+    items.forEach(item => {
+        if (!item.stats) return;
+        for (const [key, value] of Object.entries(item.stats)) {
+            if (typeof value === "number") {
+                totalStats[key] = (totalStats[key] || 0) + value;
+            } else if (typeof value === "boolean" && key === "respawn") {
+                if (value === true) totalStats.respawn = true;
+            }
+        }
+    });
+
+    return totalStats;
+}
+
+// 👇 YENİ SİSTEM: Maç sonu eşyaların limitini (Durability) azaltır ve kırılanları siler
+async function handleDurability(userId, bot, channelId, lang) {
+    const userDB = await User.findOne({ userId });
+    if (!userDB || !userDB.equipment) return;
+
+    let brokenItems = [];
+    const slots = ["weapon", "shield", "tech", "heal"];
+    let inventoryModified = false;
+
+    for (const slot of slots) {
+        const itemId = userDB.equipment[slot];
+        if (!itemId) continue;
+
+        const invItemIndex = userDB.inventory.findIndex(i => i.itemId === itemId);
+        if (invItemIndex > -1) {
+            let invItem = userDB.inventory[invItemIndex];
+
+            // Sadece kullanım limiti olan (limit > 0) eşyaların canı azalır
+            if (invItem.usageLimit > 0) {
+                invItem.usageLimit -= 1;
+                inventoryModified = true;
+
+                // Eşya kırıldıysa/tükendiyse
+                if (invItem.usageLimit <= 0) {
+                    brokenItems.push(invItem.name[lang] || invItem.name["en"] || invItem.name || "Eşya");
+                    userDB.equipment[slot] = null; // Üstünden çıkar
+
+                    // Eğer eşyadan çantada birden fazla (amount > 1) varsa
+                    if (invItem.amount > 1) {
+                        invItem.amount -= 1;
+                        // Orijinal limitini sıfırla ki bir sonraki sağlam eşyayı kullansın
+                        const storeData = await StoreItem.findOne({ itemId: invItem.itemId });
+                        invItem.usageLimit = storeData ? storeData.usageLimit : 1;
+                    } else {
+                        // Tamamen bittiyse çantadan tamamen sil
+                        userDB.inventory.splice(invItemIndex, 1);
+                    }
+                }
+            }
+        }
+    }
+
+    if (inventoryModified) {
+        userDB.markModified("equipment");
+        userDB.markModified("inventory");
+        await userDB.save();
+    }
+
+    // Kırılan eşya varsa kanala bildirim at!
+    if (brokenItems.length > 0) {
+        let msgText = lang === "tr"
+            ? `⚠️ <@${userId}>, savaşın şiddetinden dolayı şu eşyaların kırıldı/tükendi: **${brokenItems.join(", ")}**`
+            : `⚠️ <@${userId}>, due to the intensity of the battle, these items broke/depleted: **${brokenItems.join(", ")}**`;
+        bot.createMessage(channelId, msgText).catch(() => {});
+    }
+}
 
 module.exports = {
     name: "duel",
@@ -97,15 +188,20 @@ module.exports = {
         let requestTimeoutTimer;
 
         const startGame = async (interaction) => {
+            const p1Stats = await getEquippedStats(author.id);
+            const p2Stats = await getEquippedStats(targetUser.id);
+
             const p1Data = {
                 id: author.id,
                 username: author.username || translate("PLAYER", lang, { num: 1 }),
-                avatarURL: author.dynamicAvatarURL("png", 256)
+                avatarURL: author.dynamicAvatarURL("png", 256),
+                stats: p1Stats
             };
             const p2Data = {
                 id: targetUser.id,
                 username: targetUser.username || translate("PLAYER", lang, { num: 2 }),
-                avatarURL: targetUser.dynamicAvatarURL("png", 256)
+                avatarURL: targetUser.dynamicAvatarURL("png", 256),
+                stats: p2Stats
             };
 
             const game = new FightSystem(p1Data, p2Data, translate, lang);
@@ -191,8 +287,8 @@ module.exports = {
                     const winnerId = result.winner.id;
                     const loserId = (winnerId === p1Data.id) ? p2Data.id : p1Data.id;
 
-                    const prizeCoin = Math.floor(Math.random() * 101) + 100;
-                    const prizeXp = Math.floor(Math.random() * 101) + 100;
+                    const prizeCoin = Math.floor(Math.random() * 201) + 150;
+                    const prizeXp = Math.floor(Math.random() * 201) + 150;
 
                     try {
                         let winnerUser = await User.findOne({ userId: winnerId });
@@ -210,7 +306,7 @@ module.exports = {
                         await LevelSystem.addXp(loserUser, Math.floor(Math.random() * 11) + 10);
 
                         let msgText = translate("DUEL_WIN_PRIZE", lang, {
-                            winner: result.winner.name,
+                            winner: result.winner.id,
                             prize: prizeCoin,
                             xp: prizeXp
                         });
@@ -224,8 +320,12 @@ module.exports = {
 
                         bot.createMessage(msgOrInteraction.channel.id, msgText);
 
+                        // 👇 İŞTE BÜYÜ BURADA: Maç biter bitmez iki oyuncunun da eşyalarının limitini kontrol et!
+                        await handleDurability(p1Data.id, bot, msgOrInteraction.channel.id, lang);
+                        await handleDurability(p2Data.id, bot, msgOrInteraction.channel.id, lang);
+
                     } catch (err) {
-                        console.error("XP/Level hatası:", err);
+                        console.error("XP/Level veya Durability hatası:", err);
                     }
                 }
             };

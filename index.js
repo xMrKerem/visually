@@ -2,6 +2,7 @@ const Eris = require("eris");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const { startTopggWebhook } = require("./src/utils/TopggVoteSystem")
 require("dotenv").config();
 
 const colors = {
@@ -104,6 +105,7 @@ mongoose.connect(process.env.MONGO_URI)
         console.log(`${colors.green}Visually: MongoDB connection successful.${colors.reset}`);
         loadCommands();
         loadEvents();
+        startTopggWebhook()
         return bot.connect();
     })
     .catch(err => console.log(`${colors.red}Database connection error:${colors.reset} `, err));

@@ -1,0 +1,448 @@
+{
+  "chests": {
+    "wooden": {
+      "itemId": "WOOD",
+      "name": "Ahşap Sandık",
+      "name_en": "Wooden Chest",
+      "description": "İçinden yaygın ve nadir eşyalar çıkabilen basit bir sandık.",
+      "description_en": "A simple chest that can contain common and rare items.",
+      "emoji": "🪵",
+      "price": 750,
+      "image": "https://i.imgur.com/OH6boXX.jpeg",
+      "openGif": "https://i.imgur.com/0jkrXbo.gif",
+      "usageLimit": -2,
+      "contents": [
+        { "type": "common", "chance": 55 },
+        { "type": "rare", "chance": 30 },
+        { "type": "epic", "chance": 1 },
+        {
+          "type": "coin",
+          "chance": 14,
+          "outcomes": [
+            { "min": 751, "max": 1500, "chance": 10 },
+            { "min": 400, "max": 750, "chance": 85 },
+            { "min": 200, "max": 400, "chance": 5 }
+          ]
+        }
+      ]
+    },
+
+    "metal": {
+      "itemId": "METAL",
+      "name": "Metal Sandık",
+      "name_en": "Metal Chest",
+      "description": "Dayanıklı yapısı sayesinde içinden epik eşyalar çıkma ihtimali yüksektir.",
+      "description_en": "Due to its durable structure, it has a high chance of dropping epic items.",
+      "emoji": "🧰",
+      "price": 5000,
+      "image": "https://i.imgur.com/neCCAnl.jpeg",
+      "openGif": "https://i.imgur.com/JfQkWeK.gif",
+      "usageLimit": -2,
+      "contents": [
+        { "type": "rare", "chance": 45 },
+        { "type": "common", "chance": 25 },
+        { "type": "epic", "chance": 20 },
+        { "type": "legendary", "chance": 5 },
+        {
+          "type": "coin",
+          "chance": 5,
+          "outcomes": [
+            { "min": 5001, "max": 8000, "chance": 10 },
+            { "min": 1000, "max": 3000, "chance": 90 }
+          ]
+        }
+      ]
+    },
+
+    "elmas": {
+      "itemId": "DIA",
+      "name": "Elmas Sandık",
+      "name_en": "Diamond Chest",
+      "description": "Sadece en güçlü savaşçıların açabildiği, efsanevi eşyalar barındıran sandık.",
+      "description_en": "A chest containing legendary items, opened only by the strongest warriors.",
+      "emoji": "💎",
+      "price": 20000,
+      "image": "https://i.imgur.com/KwqYaWk.jpeg",
+      "openGif": "https://i.imgur.com/hn32kjv.gif",
+      "usageLimit": -2,
+      "contents": [
+        { "type": "epic", "chance": 50 },
+        { "type": "legendary", "chance": 35 },
+        { "type": "rare", "chance": 14 },
+        {
+          "type": "coin",
+          "chance": 1,
+          "outcomes": [
+            { "min": 20000, "max": 40000, "chance": 5 },
+            { "min": 5000, "max": 15000, "chance": 95 }
+          ]
+        }
+      ]
+    },
+
+    "vote": {
+      "itemId": "VOTE",
+      "name": "Vote Sandığı",
+      "name_en": "Vote Chest",
+      "description": "Bota oy verenlere hediye edilen sürprizlerle dolu özel sandık.",
+      "description_en": "A special chest full of surprises gifted to those who vote for the bot.",
+      "emoji": "🗳️",
+      "price": 0,
+      "image": "https://i.imgur.com/y4RPw8P.jpeg",
+      "openGif": "https://i.imgur.com/vBwyI94.gif",
+      "usageLimit": -2,
+      "contents": [
+        { "type": "rare", "chance": 30 },
+        { "type": "common", "chance": 30 },
+        {
+          "type": "chest_drop",
+          "chance": 20,
+          "outcomes": [
+            { "chestId": "WOOD", "chance": 60 },
+            { "chestId": "METAL", "chance": 30 },
+            { "chestId": "DIA", "chance": 10 }
+          ]
+        },
+        { "type": "epic", "chance": 10 },
+        {
+          "type": "vote_exclusive",
+          "chance": 5,
+          "note": "Sadece bu sandıktan çıkan özel eşyalar",
+          "note_en": "Only special items that came out of this box"
+        },
+        {
+          "type": "coin",
+          "chance": 5,
+          "outcomes": [
+            { "min": 750, "max": 2500, "chance": 100 }
+          ]
+        }
+      ]
+    }
+  },
+
+  "weapons": {
+    "blunt_sword": {
+      "name": "Küt Kılıç (Nanami)",
+      "name_en": "Blunt Sword (Nanami)",
+      "description": "7:3 oranında kritik vuruş yapma ihtimalini inanılmaz artıran lanetli alet.",
+      "description_en": "A cursed tool that incredibly increases the chance of a 7:3 critical strike.",
+      "emoji": "🔪",
+      "price": 3500,
+      "rarity": "rare",
+      "usageLimit": 15,
+      "stats": {
+        "atcMinDmg": 30,
+        "atcMaxDmg": 65,
+        "dmgCritChance": 0.4,
+        "dmgCriticMultiplier": 2.2
+      }
+    },
+
+    "playful_cloud": {
+      "name": "Oyunbaz Bulut",
+      "name_en": "Playful Cloud",
+      "description": "Maki'nin kullandığı, saf fiziksel güçle muazzam hasar çıkaran üçlü mınçıka.",
+      "description_en": "A three-section staff used by Maki that deals massive damage with pure physical power.",
+      "emoji": "🔗",
+      "price": 8000,
+      "rarity": "epic",
+      "usageLimit": 12,
+      "stats": {
+        "atcMinDmg": 55,
+        "atcMaxDmg": 95,
+        "armorPenetration": 0.35
+      }
+    },
+
+    "split_soul": {
+      "name": "Ruh Bölen Katana",
+      "name_en": "Split Soul Katana",
+      "description": "Her türlü savunmayı yok sayıp doğrudan rakibin ruhuna hasar veren efsanevi kılıç.",
+      "description_en": "A legendary sword that ignores all defense and damages the opponent's soul directly.",
+      "emoji": "🗡️",
+      "price": 18000,
+      "rarity": "legendary",
+      "usageLimit": 8,
+      "stats": {
+        "atcMinDmg": 70,
+        "atcMaxDmg": 110,
+        "ignoreDefense": true
+      }
+    },
+
+    "sword_birth": {
+      "name": "Kılıç Doğuşu (Kiba)",
+      "name_en": "Sword Birth (Kiba)",
+      "description": "Kiba'nın şeytani şövalye gücü. Her vuruşta yeni bir kılıç yaratarak iki kere saldırma şansı verir.",
+      "description_en": "Kiba's demonic knight power. Gives a chance to strike twice by creating a new sword.",
+      "emoji": "⚔️",
+      "price": 7500,
+      "rarity": "epic",
+      "usageLimit": 10,
+      "stats": {
+        "atcMinDmg": 40,
+        "atcMaxDmg": 75,
+        "multiHitChance": 0.3
+      }
+    },
+
+    "excalibur_destruction": {
+      "name": "Yıkım Excalibur'u",
+      "name_en": "Excalibur Destruction",
+      "description": "Karanlık varlıkları yok eden kutsal kılıç. Verdiğin hasarın bir kısmını sana can (Can Çalma) olarak döndürür.",
+      "description_en": "A holy sword. Returns a portion of the damage you deal back as health (Lifesteal).",
+      "emoji": "✨",
+      "price": 22000,
+      "rarity": "legendary",
+      "usageLimit": 5,
+      "stats": {
+        "atcMinDmg": 85,
+        "atcMaxDmg": 140,
+        "lifeSteal": 0.25
+      }
+    }
+  },
+
+  "shields": {
+    "simple_domain": {
+      "name": "Basit Alan",
+      "name_en": "Simple Domain",
+      "description": "Düşmanın özel tekniklerinden gelen hasarı büyük oranda hafifleten temel bir bariyer.",
+      "description_en": "A basic barrier that mitigates damage from the enemy's special techniques.",
+      "emoji": "🌀",
+      "price": 4000,
+      "rarity": "rare",
+      "usageLimit": 8,
+      "stats": {
+        "defense": 1.4,
+        "reduceSpcDamage": 0.5
+      }
+    },
+
+    "infinity": {
+      "name": "Sonsuzluk (Gojo)",
+      "name_en": "Infinity",
+      "description": "Gojo Satoru'nun savunması. Sana yaklaşan her saldırının ıskalama ihtimalini devasa artırır.",
+      "description_en": "Gojo Satoru's defense. Massively increases the chance of incoming attacks missing.",
+      "emoji": "🌌",
+      "price": 25000,
+      "rarity": "legendary",
+      "usageLimit": 3,
+      "stats": {
+        "defense": 1.5,
+        "enemyMissChanceBoost": 0.25
+      }
+    },
+
+    "dragon_scale": {
+      "name": "Ejderha Pulu Kalkanı",
+      "name_en": "Dragon Scale Shield",
+      "description": "Ağır hasarları emen efsanevi zırh. Alınan hasarın bir kısmını saldıran rakibe yansıtır.",
+      "description_en": "Legendary armor. Reflects a portion of the taken damage back to the attacker.",
+      "emoji": "🛡️",
+      "price": 10000,
+      "rarity": "epic",
+      "usageLimit": 6,
+      "stats": {
+        "defense": 1.7,
+        "reflectDamage": 0.2,
+        "bonusHp": 100
+      }
+    }
+  },
+
+  "heals": {
+    "phenex_tears": {
+      "name": "Phoenix Gözyaşı",
+      "name_en": "Phenex Tears",
+      "description": "Öldüğünde seni tam sağlıkla bir kez yeniden diriltir.",
+      "description_en": "Revives you once with full health when you die.",
+      "emoji": "❤️‍🔥",
+      "price": 25000,
+      "rarity": "legendary",
+      "usageLimit": 1,
+      "stats": { "respawn": true }
+    },
+
+    "rct_heal": {
+      "name": "Ters Lanetli Teknik",
+      "name_en": "Reverse Cursed Technique",
+      "description": "Negatif enerjiyi pozitife çevirir. Can yenilemenin yanı sıra üzerindeki tüm zayıflatmaları (debuff) siler.",
+      "description_en": "In addition to healing, it cleanses all debuffs applied to you.",
+      "emoji": "🩸",
+      "price": 12000,
+      "rarity": "epic",
+      "usageLimit": 1,
+      "stats": {
+        "minHp": 90,
+        "maxHp": 180,
+        "cleanseDebuffs": true
+      }
+    },
+
+    "twilight_healing": {
+      "name": "Alacakaranlık Şifası",
+      "name_en": "Twilight Healing",
+      "description": "Asia Argento'nun Kutsal Ekipmanı. Anında iyileştirmenin yanı sıra 2 tur boyunca yavaş yavaş ekstra can (Regen) verir.",
+      "description_en": "Provides instant healing plus additional health regeneration over 2 turns.",
+      "emoji": "💚",
+      "price": 4500,
+      "rarity": "rare",
+      "usageLimit": 1,
+      "stats": {
+        "minHp": 50,
+        "maxHp": 100,
+        "regenTurns": 2,
+        "regenAmount": 30
+      }
+    }
+  },
+
+  "techs": {
+    "blue": {
+      "name": "Lanetli Teknik: Mavi",
+      "name_en": "Cursed Technique: Blue",
+      "description": "Mekanı içine çökerterek rakibi sersemletme (Stun) şansı sunar.",
+      "description_en": "Collapses space, offering a chance to stun the opponent for 1 turn.",
+      "emoji": "🔵",
+      "price": 6000,
+      "rarity": "rare",
+      "usageLimit": 6,
+      "stats": {
+        "spcMinDmg": 40,
+        "spcMaxDmg": 85,
+        "stunChance": 0.25
+      }
+    },
+
+    "red": {
+      "name": "Teknik Tersine Çevirme: Kırmızı",
+      "name_en": "Technique Reversal: Red",
+      "description": "Rakibi fırlatıp atan itme tekniği. Başarılı olursa düşmanın o turki savunmasını (Guard) kırar.",
+      "description_en": "A repulsion technique that breaks the enemy's guard if successful.",
+      "emoji": "🔴",
+      "price": 11000,
+      "rarity": "epic",
+      "usageLimit": 5,
+      "stats": {
+        "spcMinDmg": 70,
+        "spcMaxDmg": 120,
+        "breakGuard": true
+      }
+    },
+
+    "purple": {
+      "name": "Boşluk Tekniği: Mor",
+      "name_en": "Hollow Technique: Purple",
+      "description": "İtme ve çekmenin birleşimi. Direkt olarak rakibin o anki canının yarısını (Yüzdelik Hasar) siler.",
+      "description_en": "Instantly erases half of the opponent's current health.",
+      "emoji": "🟣",
+      "price": 28000,
+      "rarity": "legendary",
+      "usageLimit": 2,
+      "stats": {
+        "percentHealthDamage": 0.5,
+        "spcMissChance": 0.3
+      }
+    },
+
+    "ten_shadows": {
+      "name": "On Gölge Tekniği",
+      "name_en": "Ten Shadows Technique",
+      "description": "Megumi'nin yeteneği. Düşük bir ihtimalle Mahoraga'yı çağırıp tek atma veya devasa hasar verme şansı sunar.",
+      "description_en": "Small chance to summon Mahoraga for massive devastating damage.",
+      "emoji": "🐺",
+      "price": 14000,
+      "rarity": "epic",
+      "usageLimit": 4,
+      "stats": {
+        "spcMinDmg": 80,
+        "spcMaxDmg": 140,
+        "mahoragaChance": 0.1
+      }
+    },
+
+    "divergent_fist": {
+      "name": "Ayrışan Yumruk",
+      "name_en": "Divergent Fist",
+      "description": "Vurduktan hemen sonraki turda ikinci bir lanetli enerji patlaması (Gecikmeli Hasar) yaratır.",
+      "description_en": "Creates a delayed second cursed energy explosion on the next turn.",
+      "emoji": "👊",
+      "price": 5000,
+      "rarity": "rare",
+      "usageLimit": 10,
+      "stats": {
+        "spcMinDmg": 50,
+        "spcMaxDmg": 90,
+        "delayedDamage": 40
+      }
+    },
+
+    "boosted_gear": {
+      "name": "Boosted Gear",
+      "name_en": "Boosted Gear",
+      "description": "Her kullanımda sonraki tüm saldırılarının hasarını savaş boyunca kalıcı olarak artırır (Stack).",
+      "description_en": "Permanently boosts your damage output for the rest of the fight with each use.",
+      "emoji": "🐉",
+      "price": 24000,
+      "rarity": "legendary",
+      "usageLimit": 3,
+      "stats": {
+        "spcMinDmg": 70,
+        "spcMaxDmg": 130,
+        "damageMultiplierBoost": 0.25
+      }
+    },
+
+    "divine_dividing": {
+      "name": "İlahi Bölen",
+      "name_en": "Divine Dividing",
+      "description": "Vali'nin Beyaz Ejder gücü. Rakibin saldırı gücünü 2 tur boyunca yarıya indirip kendine ekler (Zayıflatma/Çalma).",
+      "description_en": "Halves opponent's attack for 2 turns and adds it to yours.",
+      "emoji": "🤍",
+      "price": 23000,
+      "rarity": "legendary",
+      "usageLimit": 3,
+      "stats": {
+        "spcMinDmg": 80,
+        "spcMaxDmg": 130,
+        "stealAttackPercent": 0.5,
+        "debuffTurns": 2
+      }
+    },
+
+    "power_of_destruction": {
+      "name": "Yıkım Gücü",
+      "name_en": "Power of Destruction",
+      "description": "Rias Gremory'nin karanlık aurası. Düşmanın kuşandığı zırhı veya kılıcı kırma/etkisiz bırakma ihtimali vardır.",
+      "description_en": "Dark aura that has a chance to break or disable the enemy's equipped gear.",
+      "emoji": "💥",
+      "price": 13000,
+      "rarity": "epic",
+      "usageLimit": 5,
+      "stats": {
+        "spcMinDmg": 75,
+        "spcMaxDmg": 140,
+        "destroyEquipmentChance": 0.15
+      }
+    },
+
+    "holy_lightning": {
+      "name": "Kutsal Yıldırım",
+      "name_en": "Holy Lightning",
+      "description": "Akeno'nun şimşekleri. Hedefi kavurarak 2 tur boyunca her tur başında yanma hasarı (DoT) verir.",
+      "description_en": "Scorches the target, dealing DoT (Damage over Time) for 2 turns.",
+      "emoji": "⚡",
+      "price": 11000,
+      "rarity": "epic",
+      "usageLimit": 6,
+      "stats": {
+        "spcMinDmg": 60,
+        "spcMaxDmg": 110,
+        "dotDamage": 35,
+        "dotTurns": 2
+      }
+    }
+  }
+}

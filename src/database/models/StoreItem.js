@@ -37,7 +37,7 @@ const storeItemSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ["shield", "equip", "tech", "heal"]
+        enum: ["shield", "weapon", "tech", "heal", "chest", "mythic"]
     },
 
     price: {
@@ -45,14 +45,9 @@ const storeItemSchema = new mongoose.Schema({
         required: true,
     },
 
-    maxPower: {
-        type: Number,
-        required: true,
-    },
-
-    minPower: {
-        type: Number,
-        required: true,
+    stats: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {},
     },
 
     usageLimit: {
@@ -63,6 +58,26 @@ const storeItemSchema = new mongoose.Schema({
     emoji: {
         type: String,
         default: "⚔️",
+    },
+
+    expiresAt: {
+        type: Date,
+        default: null
+    },
+
+    rarity: {
+        type: String,
+        required: true,
+        enum: ["common", "rare", "epic", "legendary"]
+    },
+
+    isBuyable: {
+        type: Boolean,
+        default: true
+    },
+
+    openGif: {
+        type: String,
     }
 })
 

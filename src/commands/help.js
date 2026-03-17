@@ -46,7 +46,7 @@ module.exports = {
                 label: translate("CAT_ECO", lang),
                 description: translate("CAT_ECO_DESC", lang),
                 emoji: "💰",
-                commands: ["daily", "balance", "duel", "leaderboard"]
+                commands: ["daily", "balance", "duel", "leaderboard", "store", "inventory", "equip", "openchest", "unequip"]
             },
             moderation: {
                 label: translate("CAT_MOD", lang),
@@ -58,7 +58,7 @@ module.exports = {
                 label: translate("CAT_USER", lang),
                 description: translate("CAT_USER_DESC", lang),
                 emoji: "👤",
-                commands: ["profile", "stats", "serverinfo", "8ball", "invite", "say", "weather", "store", "help", "inventory"]
+                commands: ["profile", "stats", "serverinfo", "8ball", "invite", "say", "weather", "help"]
             },
             system: {
                 label: translate("CAT_SYS", lang),

@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
 
-    usernName: {
+    userName: {
         type: String,
         required: true,
         default: "undefined"
@@ -46,6 +46,28 @@ const userSchema = new mongoose.Schema({
     inventory: {
         type: Array,
         default: []
+    },
+
+    equipment: {
+        weapon: {
+            type: String,
+            default: null
+        },
+
+        shield: {
+            type: String,
+            default: null
+        },
+
+        tech: {
+            type: String,
+            default: null
+        },
+
+        heal: {
+            type: String,
+            default: null
+        }
     }
 });
 
