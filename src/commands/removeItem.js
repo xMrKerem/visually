@@ -48,7 +48,7 @@ module.exports = {
 
             const itemName = deletedItem.name && typeof deletedItem.name === 'object'
                 ? (deletedItem.name[lang] || deletedItem.name["en"])
-                : (deletedItem.name || "undefnied item");
+                : (deletedItem.name || translate("ITEM_FALLBACK", lang));
 
             return msgOrInteraction.editOriginalMessage({
                 embed: {

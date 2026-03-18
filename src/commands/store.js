@@ -23,7 +23,7 @@ const getItemFields = (item, category, lang) => {
     const fields = [
         {
             name: translate("PRICE", lang),
-            value: `${item.price} Coin`,
+            value: `${item.price} ${translate("COIN", lang)}`,
             inline: true,
         }
     ];
@@ -82,7 +82,7 @@ const getItemFields = (item, category, lang) => {
         } else if (typeof stats.minHp === "number" || typeof stats.maxHp === "number") {
             fields.push({
                 name: translate("HEAL", lang),
-                value: `**${stats.minHp ?? 0} - ${stats.maxHp ?? 0} HP**`,
+                value: `**${stats.minHp ?? 0} - ${stats.maxHp ?? 0} ${translate("HP", lang)}**`,
                 inline: true,
             });
         }

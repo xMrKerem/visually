@@ -38,7 +38,6 @@ async function getEquippedStats(userId) {
     return totalStats;
 }
 
-// 👇 YENİ SİSTEM: Maç sonu eşyaların limitini (Durability) azaltır ve kırılanları siler
 async function handleDurability(userId, bot, channelId, lang) {
     const userDB = await User.findOne({ userId });
     if (!userDB || !userDB.equipment) return;
@@ -55,24 +54,19 @@ async function handleDurability(userId, bot, channelId, lang) {
         if (invItemIndex > -1) {
             let invItem = userDB.inventory[invItemIndex];
 
-            // Sadece kullanım limiti olan (limit > 0) eşyaların canı azalır
             if (invItem.usageLimit > 0) {
                 invItem.usageLimit -= 1;
                 inventoryModified = true;
 
-                // Eşya kırıldıysa/tükendiyse
                 if (invItem.usageLimit <= 0) {
-                    brokenItems.push(invItem.name[lang] || invItem.name["en"] || invItem.name || "Eşya");
-                    userDB.equipment[slot] = null; // Üstünden çıkar
+                    brokenItems.push(invItem.name[lang] || invItem.name["en"] || invItem.name || translate("ITEM_FALLBACK", lang));
+                    userDB.equipment[slot] = null;
 
-                    // Eğer eşyadan çantada birden fazla (amount > 1) varsa
                     if (invItem.amount > 1) {
                         invItem.amount -= 1;
-                        // Orijinal limitini sıfırla ki bir sonraki sağlam eşyayı kullansın
                         const storeData = await StoreItem.findOne({ itemId: invItem.itemId });
                         invItem.usageLimit = storeData ? storeData.usageLimit : 1;
                     } else {
-                        // Tamamen bittiyse çantadan tamamen sil
                         userDB.inventory.splice(invItemIndex, 1);
                     }
                 }
@@ -86,11 +80,11 @@ async function handleDurability(userId, bot, channelId, lang) {
         await userDB.save();
     }
 
-    // Kırılan eşya varsa kanala bildirim at!
     if (brokenItems.length > 0) {
-        let msgText = lang === "tr"
-            ? `⚠️ <@${userId}>, savaşın şiddetinden dolayı şu eşyaların kırıldı/tükendi: **${brokenItems.join(", ")}**`
-            : `⚠️ <@${userId}>, due to the intensity of the battle, these items broke/depleted: **${brokenItems.join(", ")}**`;
+        const msgText = translate("DUEL_BROKEN_ITEMS", lang, {
+            user: userId,
+            items: brokenItems.join(", ")
+        });
         bot.createMessage(channelId, msgText).catch(() => {});
     }
 }
@@ -320,7 +314,6 @@ module.exports = {
 
                         bot.createMessage(msgOrInteraction.channel.id, msgText);
 
-                        // 👇 İŞTE BÜYÜ BURADA: Maç biter bitmez iki oyuncunun da eşyalarının limitini kontrol et!
                         await handleDurability(p1Data.id, bot, msgOrInteraction.channel.id, lang);
                         await handleDurability(p2Data.id, bot, msgOrInteraction.channel.id, lang);
 

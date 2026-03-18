@@ -60,7 +60,7 @@ module.exports = {
                     inline: true
                 },
                 {
-                    name: "📚 Library",
+                    name: "📚 " + translate("STATS_LIBRARY", lang),
                     value: `Eris v${require("eris").VERSION}`,
                     inline: true
                 }

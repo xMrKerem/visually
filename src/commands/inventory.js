@@ -85,10 +85,10 @@ module.exports = {
                     limitText = translate("DISPOSABLE", lang);
                 }
 
-                const itemName = item.name?.[lang] || item.name?.en || item.name?.tr || item.name || "Unknown Item";
+                const itemName = item.name?.[lang] || item.name?.en || item.name?.tr || item.name || translate("UNKNOWN_ITEM", lang);
                 const itemIdText = item.itemId ? ` \`${item.itemId}\`` : "";
                 const isEquipped = equippedIds.includes(item.itemId);
-                const equippedBadge = isEquipped ? (lang === "tr" ? " ✅ **[Takılı]**" : " ✅ **[Equipped]**") : "";
+                const equippedBadge = isEquipped ? ` ✅ **[${translate("EQUIPPED_BADGE", lang)}]**` : "";
 
                 return `**${start + index + 1}.** ${itemName}${itemIdText}${equippedBadge} \n└ 📦 ${translate("AMOUNT", lang)}: **${item.amount}** | 🔄 ${translate("LIMIT", lang)}: **${limitText}**`;
             }).join("\n\n");
@@ -101,7 +101,7 @@ module.exports = {
                     fields: [
                         {
                             name: "💰" + translate("WALLET", lang),
-                            value: `**${user.balance}** Coin`,
+                            value: `**${user.balance}** ${translate("COIN", lang)}`,
                             inline: true
                         },
                         {
@@ -111,7 +111,7 @@ module.exports = {
                         }
                     ],
                     thumbnail: { url: bot.user.dynamicAvatarURL("png", 256) },
-                    footer: { text: lang === "tr" ? `Sayfa ${pageIndex + 1} / ${totalPages}` : `Page ${pageIndex + 1} / ${totalPages}` }
+                    footer: { text: translate("PAGE_TEXT", lang, { current: pageIndex + 1, total: totalPages }) }
                 },
                 components: []
             };

@@ -21,7 +21,7 @@ module.exports = {
         const guildId = msgOrInteraction.guildID;
         const guild = bot.guilds.get(guildId);
 
-        if (!guild) return reply("Sunucu bilgisi alınamadı.");
+        if (!guild) return reply(translate("SERVER_INFO_ERROR", lang));
 
         await guild.fetchAllMembers()
 
@@ -47,7 +47,7 @@ module.exports = {
                     inline: true
                 },
                 {
-                    name: "🆔 ID",
+                    name: "🆔 " + translate("SI_ID", lang),
                     value: `\`${guild.id}\``,
                     inline: true
                 },
@@ -58,12 +58,12 @@ module.exports = {
                 },
                 {
                     name: "👥 " + translate("SI_MEMBERS", lang),
-                    value: `Total: **${totalMembers}**\n👤 İnsan: **${humans}**\n🤖 Bot: **${bots}**`,
+                    value: `${translate("SI_TOTAL", lang)}: **${totalMembers}**\n👤 ${translate("SI_HUMANS", lang)}: **${humans}**\n🤖 ${translate("SI_BOTS", lang)}: **${bots}**`,
                     inline: true
                 },
                 {
                     name: "💬 " + translate("SI_CHANNELS", lang),
-                    value: `Total: **${guild.channels.size}**\n📝 Yazı: **${textChannels}**\n🔊 Ses: **${voiceChannels}**`,
+                    value: `${translate("SI_TOTAL", lang)}: **${guild.channels.size}**\n📝 ${translate("SI_TEXT_CHANNELS", lang)}: **${textChannels}**\n🔊 ${translate("SI_VOICE_CHANNELS", lang)}: **${voiceChannels}**\n🗂️ ${translate("SI_CATEGORY_CHANNELS", lang)}: **${categoryChannels}**`,
                     inline: true
                 },
                 {
@@ -72,8 +72,8 @@ module.exports = {
                     inline: true
                 },
                 {
-                    name: "🚀 Boost",
-                    value: `Seviye: **${guild.premiumTier}**\nBoost Sayısı: **${guild.premiumSubscriptionCount || 0}**`,
+                    name: "🚀 " + translate("SI_BOOST", lang),
+                    value: `${translate("SI_LEVEL", lang)}: **${guild.premiumTier}**\n${translate("SI_BOOST_COUNT", lang)}: **${guild.premiumSubscriptionCount || 0}**`,
                     inline: true
                 }
             ],

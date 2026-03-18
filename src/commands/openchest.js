@@ -113,7 +113,7 @@ module.exports = {
             const sentMessage = await reply(openingPayload);
             const reward = await openChest(user, chestStoreItem);
             const rewardLabel = reward.type === "coin"
-                ? `${reward.amount} Coin`
+                ? `${reward.amount} ${translate("COIN", lang)}`
                 : `${reward.item.emoji} ${reward.item.name[lang] || reward.item.name.en}`;
 
             const rewardPayload = {

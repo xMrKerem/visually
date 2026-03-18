@@ -116,11 +116,11 @@ module.exports = {
 
             const embed = {
                 title: translate("WARN_LIST_TITLE", lang),
-                description: `**User:** <@${targetId}>\n**Total:** ${warnings.length}`,
+                description: `**${translate("WARN_USER_LABEL", lang)}:** <@${targetId}>\n**${translate("WARN_TOTAL_LABEL", lang)}:** ${warnings.length}`,
                 color: 0xe67e22,
-                fields: warnings.map((w, index) => ({
+                fields: warnings.map((w) => ({
                     name: `🆔 \`${w.warnId}\` | 📅 ${w.date.toLocaleDateString()}`,
-                    value: `👮 **Mod:** <@${w.moderatorId}>\n📝 **Reason:** ${w.reason}`
+                    value: `👮 **${translate("WARN_MOD_LABEL", lang)}:** <@${w.moderatorId}>\n📝 **${translate("WARN_REASON_LABEL", lang)}:** ${w.reason}`
                 })).slice(0, 25)
             };
 

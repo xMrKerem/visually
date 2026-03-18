@@ -36,31 +36,37 @@ class FightSystem {
     getPlayer(id) { return this.p1.id === id ? this.p1 : this.p2; }
     getOpponent(id) { return this.p1.id === id ? this.p2 : this.p1; }
 
+    pushLogs(messages) {
+        if (!Array.isArray(messages) || messages.length === 0) return;
+        this.log.push(...messages.filter(Boolean));
+        while (this.log.length > 5) this.log.shift();
+    }
+
     addMana(player, amount) {
         player.mana += amount;
         if (player.mana > player.maxMana) player.mana = player.maxMana;
     }
 
-    applyPreTurnEffects(player, opponent) {
+    applyPreTurnEffects(player, opponent, turnLogs = []) {
         player.isStunned = false;
 
         player.activeEffects.forEach(effect => {
             if (effect.type === "dot" && effect.turnsLeft > 0) {
                 player.hp -= effect.damage;
-                this.log.push(this.translate("EFFECT_DOT_DAMAGE", this.lang, { player: player.name, damage: effect.damage }));
+                turnLogs.push(this.translate("EFFECT_DOT_DAMAGE", this.lang, { player: player.name, damage: effect.damage }));
             }
             else if (effect.type === "regen" && effect.turnsLeft > 0) {
                 player.hp += effect.amount;
                 if (player.hp > player.maxHp) player.hp = player.maxHp;
-                this.log.push(this.translate("EFFECT_REGEN_HEAL", this.lang, { player: player.name, amount: effect.amount }));
+                turnLogs.push(this.translate("EFFECT_REGEN_HEAL", this.lang, { player: player.name, amount: effect.amount }));
             }
             else if (effect.type === "delayed_damage" && effect.turnsLeft === 1) {
                 player.hp -= effect.damage;
-                this.log.push(this.translate("EFFECT_DELAYED_DAMAGE", this.lang, { player: player.name, damage: effect.damage }));
+                turnLogs.push(this.translate("EFFECT_DELAYED_DAMAGE", this.lang, { player: player.name, damage: effect.damage }));
             }
             else if (effect.type === "stun" && effect.turnsLeft > 0) {
                 player.isStunned = true;
-                this.log.push(this.translate("EFFECT_STUNNED", this.lang, { player: player.name }));
+                turnLogs.push(this.translate("EFFECT_STUNNED", this.lang, { player: player.name }));
             }
             effect.turnsLeft -= 1;
         });
@@ -69,7 +75,7 @@ class FightSystem {
         if (player.hp < 0) player.hp = 0;
     }
 
-    applyPostStrikeEffects(attacker, defender, damage, action) {
+    applyPostStrikeEffects(attacker, defender, damage, action, turnLogs = []) {
         if (damage <= 0) return;
 
         if (attacker.stats.lifeSteal) {
@@ -77,13 +83,13 @@ class FightSystem {
             const heal = Math.floor(realDamage * attacker.stats.lifeSteal);
             attacker.hp += heal;
             if (attacker.hp > attacker.maxHp) attacker.hp = attacker.maxHp;
-            this.log.push(this.translate("STRIKE_LIFESTEAL", this.lang, { player: attacker.name, amount: heal }));
+            turnLogs.push(this.translate("STRIKE_LIFESTEAL", this.lang, { player: attacker.name, amount: heal }));
         }
 
         else if (defender.stats.reflectDamage) {
             const reflect = Math.floor(damage * defender.stats.reflectDamage);
             attacker.hp -= reflect;
-            this.log.push(this.translate("STRIKE_REFLECT", this.lang, { player: defender.name, amount: reflect }));
+            turnLogs.push(this.translate("STRIKE_REFLECT", this.lang, { player: defender.name, amount: reflect }));
         }
 
         else if (attacker.stats.stunChance && Math.random() < attacker.stats.stunChance) {
@@ -92,23 +98,23 @@ class FightSystem {
 
         else if (attacker.stats.dotDamage && action === "special") {
             defender.activeEffects.push({ type: "dot", damage: attacker.stats.dotDamage, turnsLeft: attacker.stats.dotTurns });
-            this.log.push(this.translate("STRIKE_SHOCK_DOT", this.lang, { player: defender.name }));
+            turnLogs.push(this.translate("STRIKE_SHOCK_DOT", this.lang, { player: defender.name }));
         }
 
         else if (attacker.stats.destroyEquipmentChance && Math.random() < attacker.stats.destroyEquipmentChance) {
             defender.guard = false;
             defender.activeEffects.push({ type: "stun", turnsLeft: 1 });
-            this.log.push(this.translate("STRIKE_DESTROY_EQUIP", this.lang, { player: attacker.name }));
+            turnLogs.push(this.translate("STRIKE_DESTROY_EQUIP", this.lang, { player: attacker.name }));
         }
 
         else if (attacker.stats.stealAttackPercent && action === "special") {
             attacker.boostStack += attacker.stats.stealAttackPercent;
-            this.log.push(this.translate("STRIKE_STEAL_ATTACK", this.lang, { player: attacker.name }));
+            turnLogs.push(this.translate("STRIKE_STEAL_ATTACK", this.lang, { player: attacker.name }));
         }
 
         else if (attacker.stats.damageMultiplierBoost && action === "special") {
             attacker.boostStack += attacker.stats.damageMultiplierBoost;
-            this.log.push(this.translate("STRIKE_BOOST_GEAR", this.lang, { player: attacker.name, amount: attacker.boostStack.toFixed(1) }));
+            turnLogs.push(this.translate("STRIKE_BOOST_GEAR", this.lang, { player: attacker.name, amount: attacker.boostStack.toFixed(1) }));
         }
 
         else if (attacker.stats.delayedDamage && action === "special") {
@@ -119,13 +125,18 @@ class FightSystem {
     async move(attackerId, action) {
         const attacker = this.getPlayer(attackerId);
         const defender = this.getOpponent(attackerId);
+        const turnLogs = [];
 
         if (this.turn !== attackerId) return { valid: false, msg: this.translate("DUEL_QUE_FAIL", this.lang) };
 
-        this.applyPreTurnEffects(attacker, defender);
-        if (attacker.hp <= 0) return this.checkDeath(defender, attacker);
+        this.applyPreTurnEffects(attacker, defender, turnLogs);
+        if (attacker.hp <= 0) {
+            this.pushLogs(turnLogs);
+            return this.checkDeath(defender, attacker);
+        }
 
         if (attacker.isStunned) {
+            this.pushLogs(turnLogs);
             this.turn = defender.id;
             return { finished: false, p1: this.p1, p2: this.p2, log: this.log, turn: this.turn };
         }
@@ -148,12 +159,12 @@ class FightSystem {
 
                 if (attacker.stats.multiHitChance && Math.random() < attacker.stats.multiHitChance) {
                     damage *= 2;
-                    this.log.push(this.translate("MOVE_MULTI_HIT", this.lang, { player: attacker.name }));
+                    turnLogs.push(this.translate("MOVE_MULTI_HIT", this.lang, { player: attacker.name }));
                 }
 
                 if (defender.guard) {
                     if (attacker.stats.ignoreDefense) {
-                        this.log.push(this.translate("MOVE_IGNORE_DEFENSE", this.lang, { player: attacker.name }));
+                        turnLogs.push(this.translate("MOVE_IGNORE_DEFENSE", this.lang, { player: attacker.name }));
                     } else {
                         let def = defender.stats.defense;
                         if (attacker.stats.armorPenetration) def -= attacker.stats.armorPenetration;
@@ -189,11 +200,11 @@ class FightSystem {
             } else {
                 if (attacker.stats.mahoragaChance && Math.random() < attacker.stats.mahoragaChance) {
                     damage = 9999;
-                    this.log.push(this.translate("MOVE_MAHORAGA", this.lang, { player: attacker.name }));
+                    turnLogs.push(this.translate("MOVE_MAHORAGA", this.lang, { player: attacker.name }));
                 }
                 else if (attacker.stats.percentHealthDamage) {
                     damage = Math.floor(defender.hp * attacker.stats.percentHealthDamage);
-                    this.log.push(this.translate("MOVE_HOLLOW_PURPLE", this.lang));
+                    turnLogs.push(this.translate("MOVE_HOLLOW_PURPLE", this.lang));
                 }
                 else {
                     let min = attacker.stats.spcMinDmg || 60;
@@ -208,7 +219,7 @@ class FightSystem {
 
                 if (attacker.stats.breakGuard && defender.guard) {
                     defender.guard = false;
-                    this.log.push(this.translate("MOVE_BREAK_GUARD", this.lang));
+                    turnLogs.push(this.translate("MOVE_BREAK_GUARD", this.lang));
                 }
 
                 msgKey = "DUEL_SPECIAL_HIT";
@@ -228,7 +239,7 @@ class FightSystem {
 
             if (attacker.stats.cleanseDebuffs) {
                 attacker.activeEffects = [];
-                this.log.push(this.translate("MOVE_CLEANSE_DEBUFFS", this.lang, { player: attacker.name }));
+                turnLogs.push(this.translate("MOVE_CLEANSE_DEBUFFS", this.lang, { player: attacker.name }));
             }
 
             if (attacker.stats.regenTurns) {
@@ -248,8 +259,6 @@ class FightSystem {
 
             defender.hp -= damage;
             if (defender.hp < 0) defender.hp = 0;
-
-            this.applyPostStrikeEffects(attacker, defender, damage, action);
         }
 
         if (action !== "guard") attacker.guard = false;
@@ -258,8 +267,13 @@ class FightSystem {
             attacker: attacker.name, damage: damage, heal: healAmount, target: defender.name
         });
 
-        this.log.push(message);
-        if (this.log.length > 5) this.log.shift();
+        this.pushLogs([message]);
+
+        if (damage > 0 && action !== "heal") {
+            this.applyPostStrikeEffects(attacker, defender, damage, action, turnLogs);
+        }
+
+        this.pushLogs(turnLogs);
 
         return this.checkDeath(attacker, defender, message);
     }
@@ -272,7 +286,7 @@ class FightSystem {
                 defender.activeEffects = [];
 
                 const reviveMsg = this.translate("DUEL_REVIVE_PHOENIX", this.lang, { player: defender.name });
-                this.log.push(`\n❤️‍🔥 ${reviveMsg}`);
+                this.log.push(`\nâ¤ï¸â€ğŸ”¥ ${reviveMsg}`);
             } else {
                 this.isFinished = true;
                 return { finished: true, winner: attacker, msg: lastMessage };

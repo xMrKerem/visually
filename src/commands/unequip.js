@@ -77,13 +77,13 @@ module.exports = {
         user.markModified("equipment");
         await user.save();
 
-        const itemName = storeItem ? (storeItem.name[lang] || storeItem.name["en"]) : "Item";
+        const itemName = storeItem ? (storeItem.name[lang] || storeItem.name["en"]) : translate("ITEM_FALLBACK", lang);
         const itemEmoji = storeItem?.emoji || "📦";
         const slotName = translate("CAT_" + slotKey.toUpperCase(), lang);
 
         return reply({
             embed: {
-                title: "✅ " + (translate("UNEQUIPPED_TITLE", lang) || "Başarıyla Çıkarıldı"),
+                title: "✅ " + translate("UNEQUIPPED_TITLE", lang),
                 description: translate("UNEQUIP_SUCCESS", lang)
                     .replace("{item}", `${itemEmoji} ${itemName}`)
                     .replace("{slot}", slotName),
