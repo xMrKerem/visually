@@ -29,12 +29,17 @@ const claimVoteChest = async (user, voteChestItem) => {
     return true;
 };
 
+const normalizePath = (value = "/") => {
+    if (!value || value === "/") return "/";
+    return value.replace(/\/+$/, "");
+};
+
 const startTopggWebhook = () => {
     if (serverStarted) return;
 
     const auth = process.env.TOPGG_WEBHOOK_AUTH;
     const port = Number(process.env.TOPGG_WEBHOOK_PORT || 8080);
-    const path = process.env.TOPGG_WEBHOOK_PATH || "/topgg/webhook";
+    const path = normalizePath(process.env.TOPGG_WEBHOOK_PATH || "/topgg/webhook");
 
     if (!auth) {
         console.log("[top.gg] Webhook auth not set. Vote rewards are passive-only until configured.");
@@ -42,12 +47,16 @@ const startTopggWebhook = () => {
     }
 
     const server = http.createServer(async (req, res) => {
-        if (req.method !== "POST" || req.url !== path) {
+        const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "127.0.0.1"}`);
+        const requestPath = normalizePath(requestUrl.pathname);
+
+        if (req.method !== "POST" || requestPath !== path) {
             res.statusCode = 404;
             return res.end("Not Found");
         }
 
         if (req.headers.authorization !== auth) {
+            console.log(`[top.gg] Unauthorized webhook request. Path=${requestPath} AuthPrefix=${String(req.headers.authorization || "").slice(0, 12)}`);
             res.statusCode = 401;
             return res.end("Unauthorized");
         }
@@ -76,6 +85,7 @@ const startTopggWebhook = () => {
 
                 await user.save();
 
+                console.log(`[top.gg] Vote webhook accepted for user ${payload.user}. Type=${user.topgg.lastVoteType}`);
                 res.statusCode = 200;
                 return res.end("OK");
             } catch (error) {
