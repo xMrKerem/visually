@@ -3,6 +3,7 @@ const User = require("../database/models/User");
 const { addItemToInventory } = require("./ChestSystem");
 
 let serverStarted = false;
+const TOPGG_WEBHOOK_IPS = new Set(["159.203.105.187"]);
 
 const getVoteUrl = (botId) => `https://top.gg/bot/${botId}/vote`;
 
@@ -34,6 +35,8 @@ const normalizePath = (value = "/") => {
     return value.replace(/\/+$/, "");
 };
 
+const normalizeIp = (value = "") => String(value).replace(/^::ffff:/, "");
+
 const startTopggWebhook = () => {
     if (serverStarted) return;
 
@@ -49,14 +52,18 @@ const startTopggWebhook = () => {
     const server = http.createServer(async (req, res) => {
         const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "127.0.0.1"}`);
         const requestPath = normalizePath(requestUrl.pathname);
+        const forwardedIp = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+        const requestIp = normalizeIp(forwardedIp || req.socket.remoteAddress || "");
+        const hasValidAuth = req.headers.authorization === auth;
+        const isTrustedTopggIp = TOPGG_WEBHOOK_IPS.has(requestIp);
 
         if (req.method !== "POST" || requestPath !== path) {
             res.statusCode = 404;
             return res.end("Not Found");
         }
 
-        if (req.headers.authorization !== auth) {
-            console.log(`[top.gg] Unauthorized webhook request. Path=${requestPath} AuthPrefix=${String(req.headers.authorization || "").slice(0, 12)}`);
+        if (!hasValidAuth && !isTrustedTopggIp) {
+            console.log(`[top.gg] Unauthorized webhook request. Path=${requestPath} AuthPrefix=${String(req.headers.authorization || "").slice(0, 12)} Ip=${requestIp}`);
             res.statusCode = 401;
             return res.end("Unauthorized");
         }
@@ -85,7 +92,7 @@ const startTopggWebhook = () => {
 
                 await user.save();
 
-                console.log(`[top.gg] Vote webhook accepted for user ${payload.user}. Type=${user.topgg.lastVoteType}`);
+                console.log(`[top.gg] Vote webhook accepted for user ${payload.user}. Type=${user.topgg.lastVoteType} Auth=${hasValidAuth ? "header" : "ip"} Ip=${requestIp}`);
                 res.statusCode = 200;
                 return res.end("OK");
             } catch (error) {
