@@ -15,7 +15,7 @@
   "COMMANDS_LIST": "Commands",
   "NO_COMMANDS": "No commands loaded yet.",
   "TOTAL_COMMANDS": "Total {count} commands",
-  "HELP_MAIN_TEXT": "Hello! I am **Visually**. An advanced entertainment and moderation bot.\n\nUse the menu below to explore my commands.\n\n❓ **Support:** Use `/invite` to join our support server.",
+  "HELP_MAIN_TEXT": "Hello! I am **Visually**. An advanced entertainment and moderation bot.\n\nUse the menu below to explore my commands.\n\n❓ **Support:** Use `/invite` to join our support server.\n\n[Privacy Policy](https://github.com/xMrKerem/visually?tab=readme-ov-file#%EF%B8%8F-privacy-policy-gizlilik-politikas%C4%B1)\n[Terms of Service](https://github.com/xMrKerem/visually?tab=readme-ov-file#%EF%B8%8F-terms-of-service-hizmet-%C5%9Fartlar%C4%B1)",
   "HELP_PLACEHOLDER": "Select a category...",
   "HELP_LINKS_TITLE": "Links",
   "SUPPORT_SERVER": "Support Server",

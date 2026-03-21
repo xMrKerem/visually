@@ -15,7 +15,7 @@
   "COMMANDS_LIST": "Komutlar",
   "NO_COMMANDS": "Henüz yüklenmiş komut yok.",
   "TOTAL_COMMANDS": "Toplam {count} komut",
-  "HELP_MAIN_TEXT": "Merhaba! Ben **Visually**. Gelişmiş bir eğlence ve moderasyon botuyum.\n\nKomutlarımı görmek için aşağıdaki menüyü kullanabilirsin.\n\n❓ **Destek:** `/invite` komutu ile destek sunucumuza gelebilirsin.",
+  "HELP_MAIN_TEXT": "Merhaba! Ben **Visually**. Gelişmiş bir eğlence ve moderasyon botuyum.\n\nKomutlarımı görmek için aşağıdaki menüyü kullanabilirsin.\n\n❓ **Destek:** `/invite` komutu ile destek sunucumuza gelebilirsin.\n\n[Gizlilik Politikası](https://github.com/xMrKerem/visually?tab=readme-ov-file#%EF%B8%8F-privacy-policy-gizlilik-politikas%C4%B1)\n[Hizmet Şartları](https://github.com/xMrKerem/visually?tab=readme-ov-file#%EF%B8%8F-terms-of-service-hizmet-%C5%9Fartlar%C4%B1)",
   "HELP_PLACEHOLDER": "Bir kategori seç...",
   "HELP_LINKS_TITLE": "Linkler",
   "SUPPORT_SERVER": "Destek Sunucusu",
