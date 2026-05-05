@@ -1,9 +1,9 @@
 const http = require("http");
+const crypto = require("crypto");
 const User = require("../database/models/User");
 const { addItemToInventory } = require("./ChestSystem");
 
 let serverStarted = false;
-const TOPGG_WEBHOOK_IPS = new Set(["159.203.105.187"]);
 
 const getVoteUrl = (botId) => `https://top.gg/bot/${botId}/vote`;
 
@@ -19,7 +19,19 @@ const hasUnclaimedVote = (user) => {
 const claimVoteChest = async (user, voteChestItem) => {
     if (!hasUnclaimedVote(user)) return false;
 
-    addItemToInventory(user, voteChestItem, 1);
+    const alreadyHas = user.inventory.find((i) => i.itemId === voteChestItem.itemId);
+    if (alreadyHas) {
+        alreadyHas.amount += 1;
+    } else {
+        user.inventory.push({
+            itemId: voteChestItem.itemId,
+            name: voteChestItem.name,
+            usageLimit: voteChestItem.usageLimit,
+            amount: 1,
+            category: voteChestItem.category,
+            rarity: voteChestItem.rarity
+        });
+    }
 
     if (!user.topgg) user.topgg = {};
     user.topgg.lastVoteClaimedAt = user.topgg.lastVoteAt;
@@ -54,16 +66,15 @@ const startTopggWebhook = () => {
         const requestPath = normalizePath(requestUrl.pathname);
         const forwardedIp = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
         const requestIp = normalizeIp(forwardedIp || req.socket.remoteAddress || "");
-        const hasValidAuth = req.headers.authorization === auth;
-        const isTrustedTopggIp = TOPGG_WEBHOOK_IPS.has(requestIp);
+        const signatureHeader = req.headers["x-topgg-signature"];
 
         if (req.method !== "POST" || requestPath !== path) {
             res.statusCode = 404;
             return res.end("Not Found");
         }
 
-        if (!hasValidAuth && !isTrustedTopggIp) {
-            console.log(`[top.gg] Unauthorized webhook request. Path=${requestPath} AuthPrefix=${String(req.headers.authorization || "").slice(0, 12)} Ip=${requestIp}`);
+        if (!signatureHeader) {
+            console.log("[top.gg] İmza başlığı eksik!");
             res.statusCode = 401;
             return res.end("Unauthorized");
         }
@@ -75,26 +86,56 @@ const startTopggWebhook = () => {
 
         req.on("end", async () => {
             try {
-                const payload = JSON.parse(body || "{}");
-                if (!payload.user) {
-                    res.statusCode = 400;
-                    return res.end("Missing user");
+                const signatureParts = signatureHeader.split(",");
+                const timestamp = signatureParts.find(p => p.startsWith("t=")).split("=")[1];
+                const topggSignature = signatureParts.find(p => p.startsWith("v1=")).split("=")[1];
+
+                const payloadToSign = `${timestamp}.${body}`;
+
+                const mySignature = crypto
+                    .createHmac("sha256", auth)
+                    .update(payloadToSign)
+                    .digest("hex");
+
+                console.log("[mySignature]", mySignature);
+                console.log("[topggSignature]", topggSignature);
+
+                if (mySignature !== topggSignature) {
+                    console.log("[top.gg] Kriptografik imza eşleşmedi!");
+                    res.statusCode = 401;
+                    return res.end("Unauthorized");
                 }
 
-                const existingUser = await User.findOne({ userId: payload.user });
-                const user = existingUser || new User({ userId: payload.user });
-
-                if (!user.topgg) user.topgg = {};
-                user.topgg.lastVoteAt = new Date();
-                user.topgg.lastVoteType = payload.type || "upvote";
-                user.topgg.lastIsWeekend = Boolean(payload.isWeekend);
-                user.markModified("topgg");
-
-                await user.save();
-
-                console.log(`[top.gg] Vote webhook accepted for user ${payload.user}. Type=${user.topgg.lastVoteType} Auth=${hasValidAuth ? "header" : "ip"} Ip=${requestIp}`);
                 res.statusCode = 200;
-                return res.end("OK");
+                res.end("OK");
+
+                try {
+                    const payload = JSON.parse(body || "{}");
+
+                    if (!payload.user) {
+                        console.log("[top.gg] Payload içinde user bulunamadı.");
+                        return;
+                    }
+
+                    await User.findOneAndUpdate(
+                        { userId: payload.user },
+                        {
+                            $set: {
+                                "topgg.lastVoteAt": new Date(),
+                                "topgg.lastVoteType": payload.type || "upvote",
+                                "topgg.lastIsWeekend": Boolean(payload.isWeekend)
+                            }
+                        },
+                        {
+                            upsert: true,
+                            setDefaultsOnInsert: true
+                        }
+                    );
+
+                    console.log(`[top.gg] Başarılı! Veritabanına işlendi. User: ${payload.user}`);
+                } catch (dbError) {
+                    console.error("[top.gg] Veritabanı kayıt hatası:", dbError);
+                }
             } catch (error) {
                 console.error("[top.gg] Webhook error:", error);
                 res.statusCode = 500;

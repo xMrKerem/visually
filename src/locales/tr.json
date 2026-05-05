@@ -377,4 +377,13 @@
   ,"WARN_TOTAL_LABEL": "Toplam"
   ,"WARN_MOD_LABEL": "Mod"
   ,"WARN_REASON_LABEL": "Sebep"
+  ,"DUEL_VS": "VS"
+  ,"DUEL_HP_SHORT": "Can"
+  ,"DUEL_MP_SHORT": "MP"
+  ,"DUEL_PLAYER_ONE": "OYUNCU 1"
+  ,"DUEL_PLAYER_TWO": "OYUNCU 2"
+  ,"WELCOME_CARD_TITLE": "HOŞGELDİN"
+  ,"GOODBYE_CARD_TITLE": "GÜLE GÜLE"
+  ,"WELCOME_CARD_COUNT": "Seninle birlikte {count} kişi olduk!"
+  ,"GOODBYE_CARD_COUNT": "Sensiz {count} kişi kaldık..."
 }

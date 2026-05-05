@@ -1,5 +1,4 @@
 const translate = require("../utils/Translate");
-const os = require("os");
 
 module.exports = {
     name: "stats",

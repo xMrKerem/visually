@@ -274,7 +274,8 @@ module.exports = {
         });
 
         const listener = async (interaction) => {
-            if (!message || !interaction.message || interaction.message.id !== message.id) return;
+            if (!message || !interaction.message) return;
+            if (interaction.data.custom_id !== "check_vote_reward" && interaction.message.id !== message.id) return;
 
             const commandUserId = (msgOrInteraction.member || msgOrInteraction.author || msgOrInteraction.user).id;
             const clickerId = (interaction.member || interaction.user).id;
@@ -287,30 +288,37 @@ module.exports = {
             }
 
             if (interaction.data.custom_id === "check_vote_reward") {
-                let user = await User.findOne({ userId: clickerId });
-                const voteChest = await StoreItem.findOne({ itemId: "VOTE", category: "chest" });
+                try {
+                    let user = await User.findOne({ userId: clickerId });
+                    const voteChest = await StoreItem.findOne({ itemId: "VOTE", category: "chest" });
 
-                if (!user || !voteChest) {
-                    return interaction.createMessage({ content: translate("NOT_USER_OR_ITEM", lang), flags: 64 });
-                }
+                    if (!user || !voteChest) {
+                        return interaction.createMessage({ content: translate("NOT_USER_OR_ITEM", lang), flags: 64 });
+                    }
 
-                if (!hasUnclaimedVote(user)) {
+                    if (!hasUnclaimedVote(user)) {
+                        return interaction.createMessage({
+                            content: translate("VOTE_CHEST_PENDING", lang),
+                            components: getVoteChestComponents(bot, lang),
+                            flags: 64
+                        });
+                    }
+
+                    const claimed = await claimVoteChest(user, voteChest);
+                    if (!claimed) {
+                        return interaction.createMessage({ content: translate("VOTE_CHEST_PENDING", lang), flags: 64 });
+                    }
+
+                    const itemName = typeof voteChest.name === "string" ? voteChest.name : (voteChest.name[lang] || voteChest.name.en);
+
                     return interaction.createMessage({
-                        content: translate("VOTE_CHEST_PENDING", lang),
-                        components: getVoteChestComponents(bot, lang),
+                        content: translate("VOTE_CHEST_CLAIMED", lang, { item: itemName }),
                         flags: 64
                     });
+                } catch (error) {
+                    console.error("[Store] Check Vote Buton Hatası:", error); // Eğer yine çalışmazsa konsolda bize faili gösterecek!
+                    return interaction.createMessage({ content: "Sistemsel bir hata oluştu, lütfen yapımcıya bildirin.", flags: 64 });
                 }
-
-                const claimed = await claimVoteChest(user, voteChest);
-                if (!claimed) {
-                    return interaction.createMessage({ content: translate("VOTE_CHEST_PENDING", lang), flags: 64 });
-                }
-
-                return interaction.createMessage({
-                    content: translate("VOTE_CHEST_CLAIMED", lang, { item: voteChest.name[lang] || voteChest.name.en }),
-                    flags: 64
-                });
             }
 
             if (interaction.data.custom_id.startsWith("buy_")) {

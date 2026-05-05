@@ -68,6 +68,13 @@ const userSchema = new mongoose.Schema({
             type: String,
             default: null
         }
+    },
+
+    topgg: {
+        lastVoteAt: { type: Date, default: null },
+        lastVoteClaimedAt: { type: Date, default: null },
+        lastVoteType: { type: String, default: null },
+        lastIsWeekend: { type: Boolean, default: false }
     }
 });
 

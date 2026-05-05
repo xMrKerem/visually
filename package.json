@@ -1,26 +1,38 @@
 {
-  "name": "Visually",
-  "version": "1.0.0",
-  "description": "",
+  "name": "visually",
+  "version": "2.1.1",
+  "description": "A multilingual visual-first Discord bot built with Eris and MongoDB.",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "xMrKerem",
+  "license": "MIT",
   "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22 <25",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "check": "pnpm lint"
+  },
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "eris",
+    "mongodb",
+    "multilingual"
+  ],
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@napi-rs/canvas": "^0.1.92",
     "axios": "^1.13.5",
-    "canvas": "^3.2.1",
-    "crypto": "^1.0.1",
     "dotenv": "^17.2.4",
     "eris": "^0.18.0",
-    "fs": "0.0.1-security",
-    "mongoose": "^9.2.1",
-    "path": "^0.12.7"
+    "mongoose": "^9.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "nodemon": "^3.0.0"
   }
 }

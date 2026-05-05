@@ -1,4 +1,3 @@
-const Guild = require("../database/models/Guild");
 const translate = require("../utils/Translate");
 
 module.exports = {

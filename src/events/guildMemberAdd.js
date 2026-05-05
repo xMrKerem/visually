@@ -21,7 +21,12 @@ module.exports = {
         if (guildData.welcomeChannel) {
             try {
                 const memberCount = guild.memberCount;
-                const buffer = await CanvasUtil.drawWelcome(member, "welcome", memberCount);
+                const buffer = await CanvasUtil.drawWelcome(member, "welcome", memberCount, {
+                    welcomeTitle: translate("WELCOME_CARD_TITLE", lang),
+                    goodbyeTitle: translate("GOODBYE_CARD_TITLE", lang),
+                    welcomeCount: translate("WELCOME_CARD_COUNT", lang),
+                    goodbyeCount: translate("GOODBYE_CARD_COUNT", lang)
+                });
 
                 await bot.createMessage(guildData.welcomeChannel, {
                     content: translate("WELCOME_MSG", lang, { user: `<@${member.id}>` }),

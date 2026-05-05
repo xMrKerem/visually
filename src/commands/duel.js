@@ -215,7 +215,13 @@ module.exports = {
             };
 
             const renderGame = async (gameInstance) => {
-                const buffer = await CanvasUtil.drawDuel(gameInstance.p1, gameInstance.p2);
+                const buffer = await CanvasUtil.drawDuel(gameInstance.p1, gameInstance.p2, {
+                    vs: translate("DUEL_VS", lang),
+                    hp: translate("DUEL_HP_SHORT", lang),
+                    mp: translate("DUEL_MP_SHORT", lang),
+                    player1: translate("DUEL_PLAYER_ONE", lang),
+                    player2: translate("DUEL_PLAYER_TWO", lang)
+                });
                 const currentPlayer = gameInstance.getPlayer(gameInstance.turn);
 
                 let logText = "";

@@ -377,4 +377,13 @@
   ,"WARN_TOTAL_LABEL": "Total"
   ,"WARN_MOD_LABEL": "Mod"
   ,"WARN_REASON_LABEL": "Reason"
+  ,"DUEL_VS": "VS"
+  ,"DUEL_HP_SHORT": "HP"
+  ,"DUEL_MP_SHORT": "MP"
+  ,"DUEL_PLAYER_ONE": "PLAYER 1"
+  ,"DUEL_PLAYER_TWO": "PLAYER 2"
+  ,"WELCOME_CARD_TITLE": "WELCOME"
+  ,"GOODBYE_CARD_TITLE": "GOODBYE"
+  ,"WELCOME_CARD_COUNT": "We are now {count} members with you!"
+  ,"GOODBYE_CARD_COUNT": "We are now {count} members without you..."
 }

@@ -1,225 +1,264 @@
-const { createCanvas, loadImage } = require('@napi-rs/canvas');
+const { createCanvas, loadImage } = require("@napi-rs/canvas");
+
+const DEFAULT_AVATAR = "https://cdn.discordapp.com/embed/avatars/0.png";
+
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+const drawRoundedRect = (ctx, x, y, width, height, radius) => {
+    const safeRadius = Math.min(radius, width / 2, height / 2);
+    ctx.beginPath();
+    if (ctx.roundRect) {
+        ctx.roundRect(x, y, width, height, safeRadius);
+    } else {
+        ctx.moveTo(x + safeRadius, y);
+        ctx.arcTo(x + width, y, x + width, y + height, safeRadius);
+        ctx.arcTo(x + width, y + height, x, y + height, safeRadius);
+        ctx.arcTo(x, y + height, x, y, safeRadius);
+        ctx.arcTo(x, y, x + width, y, safeRadius);
+    }
+    ctx.closePath();
+};
+
+const loadSafeImage = async (url) => {
+    try {
+        return await loadImage(url || DEFAULT_AVATAR);
+    } catch (error) {
+        return await loadImage(DEFAULT_AVATAR);
+    }
+};
+
+const drawCoverImage = (ctx, image, x, y, width, height) => {
+    const imgWidth = image.width || width;
+    const imgHeight = image.height || height;
+    const scale = Math.max(width / imgWidth, height / imgHeight);
+    const drawWidth = imgWidth * scale;
+    const drawHeight = imgHeight * scale;
+    const dx = x - (drawWidth - width) / 2;
+    const dy = y - (drawHeight - height) / 2;
+    ctx.drawImage(image, dx, dy, drawWidth, drawHeight);
+};
+
+const drawCircularAvatar = async (ctx, avatarUrl, cx, cy, radius, borderColor, borderWidth = 6) => {
+    const avatar = await loadSafeImage(avatarUrl);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.clip();
+    ctx.fillStyle = "#2c3e50";
+    ctx.fill();
+    drawCoverImage(ctx, avatar, cx - radius, cy - radius, radius * 2, radius * 2);
+    ctx.restore();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2, true);
+    ctx.lineWidth = borderWidth;
+    ctx.strokeStyle = borderColor;
+    ctx.stroke();
+};
+
+const fitText = (ctx, text, maxWidth, initialSize, weight = "bold", family = "Arial") => {
+    let size = initialSize;
+    while (size > 12) {
+        ctx.font = `${weight} ${size}px ${family}`;
+        if (ctx.measureText(text).width <= maxWidth) break;
+        size -= 2;
+    }
+    return ctx.font;
+};
+
+const truncateText = (ctx, text, maxWidth) => {
+    if (ctx.measureText(text).width <= maxWidth) return text;
+    let output = text;
+    while (output.length > 1 && ctx.measureText(`${output}...`).width > maxWidth) {
+        output = output.slice(0, -1);
+    }
+    return `${output}...`;
+};
+
+const drawProgressBar = (ctx, x, y, width, height, ratio, fillColor, backgroundColor) => {
+    const safeRatio = clamp(ratio || 0, 0, 1);
+    ctx.fillStyle = backgroundColor;
+    drawRoundedRect(ctx, x, y, width, height, height / 2);
+    ctx.fill();
+
+    if (safeRatio <= 0) return;
+
+    ctx.fillStyle = fillColor;
+    drawRoundedRect(ctx, x, y, Math.max(height, width * safeRatio), height, height / 2);
+    ctx.fill();
+};
 
 module.exports = {
-    // 1. DÜELLO (VS) ÇİZİMİ
-    drawDuel: async (p1, p2) => {
+    drawDuel: async (p1, p2, texts = {}) => {
         const canvas = createCanvas(800, 400);
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
+        const duelTexts = {
+            vs: texts.vs || "VS",
+            hp: texts.hp || "HP",
+            mp: texts.mp || "MP",
+            player1: texts.player1 || "PLAYER 1",
+            player2: texts.player2 || "PLAYER 2"
+        };
 
-        // Arkaplan (Degrade)
+        ctx.antialias = "subpixel";
+        ctx.patternQuality = "best";
+        ctx.quality = "best";
+        ctx.textDrawingMode = "path";
+
         const gradient = ctx.createLinearGradient(0, 0, 800, 400);
-        gradient.addColorStop(0, '#0f0c29');
-        gradient.addColorStop(0.5, '#302b63');
-        gradient.addColorStop(1, '#24243e');
+        gradient.addColorStop(0, "#0f0c29");
+        gradient.addColorStop(0.5, "#302b63");
+        gradient.addColorStop(1, "#24243e");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Avatar Yükleme (Hata Korumalı)
-        const defaultAvatar = "https://cdn.discordapp.com/embed/avatars/0.png";
-        let avatar1, avatar2;
+        ctx.fillStyle = "rgba(255,255,255,0.05)";
+        ctx.beginPath();
+        ctx.arc(140, 90, 120, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(660, 310, 150, 0, Math.PI * 2);
+        ctx.fill();
 
-        try {
-            avatar1 = await loadImage(p1.avatarURL || defaultAvatar);
-        } catch (e) {
-            avatar1 = await loadImage(defaultAvatar);
-        }
+        await drawCircularAvatar(ctx, p1.avatarURL || DEFAULT_AVATAR, 160, 160, 78, "#ffffff", 5);
+        await drawCircularAvatar(ctx, p2.avatarURL || DEFAULT_AVATAR, 640, 160, 78, "#ffffff", 5);
 
-        try {
-            avatar2 = await loadImage(p2.avatarURL || defaultAvatar);
-        } catch (e) {
-            avatar2 = await loadImage(defaultAvatar);
-        }
+        ctx.font = "italic bold 80px Arial";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.10)";
+        ctx.fillText(duelTexts.vs, 404, 214);
+        ctx.fillStyle = "#ff4757";
+        ctx.fillText(duelTexts.vs, 400, 210);
 
-        // Çerçeveleri Çiz
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 5;
-        // Sol Çerçeve
-        ctx.strokeRect(80, 80, 160, 160);
-        // Sağ Çerçeve
-        ctx.strokeRect(560, 80, 160, 160);
-
-        // Avatarları Çiz
-        ctx.drawImage(avatar1, 85, 85, 150, 150);
-        ctx.drawImage(avatar2, 565, 85, 150, 150);
-
-        // Ortadaki VS Yazısı
-        ctx.font = 'italic bold 80px Arial';
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-        ctx.textAlign = 'center';
-        ctx.fillText('VS', 400, 220); // Gölge
-        ctx.fillStyle = '#ff4757';
-        ctx.fillText('VS', 400, 210); // Asıl Yazı
-
-        // İstatistik Barları (HP ve MP)
         const drawStats = (player, x, align) => {
-            const barWidth = 200;
-            const startX = align === 'left' ? x : x - barWidth;
+            const barWidth = 220;
+            const hpMax = Math.max(player.maxHp || 500, 1);
+            const manaMax = Math.max(player.maxMana || 200, 1);
+            const startX = align === "left" ? x : x - barWidth;
+            const textX = align === "left" ? startX : startX + barWidth;
+            const safeHp = clamp(player.hp || 0, 0, hpMax);
+            const safeMana = clamp(player.mana || 0, 0, manaMax);
 
-            // HP Bar Arkaplan
-            ctx.fillStyle = '#333';
-            ctx.fillRect(startX, 260, barWidth, 20);
-            // HP Bar Doluluk
-            ctx.fillStyle = '#ff4757'; // Kırmızı
-            ctx.fillRect(startX, 260, (player.hp / 500) * barWidth, 20);
+            drawProgressBar(ctx, startX, 270, barWidth, 22, safeHp / hpMax, "#ff4757", "rgba(0,0,0,0.35)");
+            drawProgressBar(ctx, startX, 304, barWidth, 12, safeMana / manaMax, "#2e86de", "rgba(0,0,0,0.35)");
 
-            // Mana Bar Arkaplan
-            ctx.fillStyle = '#333';
-            ctx.fillRect(startX, 290, barWidth, 12);
-            // Mana Bar Doluluk
-            ctx.fillStyle = '#2e86de'; // Mavi
-            ctx.fillRect(startX, 290, (player.mana / 100) * barWidth, 12);
-
-            // Metinler
-            ctx.font = 'bold 16px Arial';
-            ctx.fillStyle = '#fff';
+            ctx.font = "bold 16px Arial";
+            ctx.fillStyle = "#fff";
             ctx.textAlign = align;
-            ctx.fillText(`${player.hp} HP`, align === 'left' ? startX : startX + barWidth, 255);
-            ctx.fillText(`${player.mana} MP`, align === 'left' ? startX : startX + barWidth, 315);
+            ctx.fillText(`${safeHp} / ${hpMax} ${duelTexts.hp}`, textX, 264);
+            ctx.fillText(`${safeMana} / ${manaMax} ${duelTexts.mp}`, textX, 329);
         };
 
-        drawStats(p1, 60, 'left');
-        drawStats(p2, 740, 'right');
+        drawStats(p1, 50, "left");
+        drawStats(p2, 750, "right");
 
-        // İsimler
-        const name1 = p1.name ? p1.name.toUpperCase() : "PLAYER 1";
-        const name2 = p2.name ? p2.name.toUpperCase() : "PLAYER 2";
+        const name1 = (p1.name || duelTexts.player1).toUpperCase();
+        const name2 = (p2.name || duelTexts.player2).toUpperCase();
 
-        ctx.font = 'bold 22px Arial';
-        ctx.fillStyle = '#f1f2f6';
-        ctx.textAlign = 'center';
-        ctx.fillText(name1, 160, 60);
-        ctx.fillText(name2, 640, 60);
+        ctx.fillStyle = "#f1f2f6";
+        ctx.textAlign = "center";
+        fitText(ctx, name1, 260, 24);
+        ctx.fillText(truncateText(ctx, name1, 260), 160, 58);
+        fitText(ctx, name2, 260, 24);
+        ctx.fillText(truncateText(ctx, name2, 260), 640, 58);
 
-        return canvas.encode('jpeg', 80);
+        return canvas.encode("jpeg", 90);
     },
 
-    // 2. PROFİL (KANYA) ÇİZİMİ - [FIXED: AVATAR ÇÖKME SORUNU]
     drawProfile: async (user, userData, nextLevelXp, texts) => {
         const canvas = createCanvas(800, 300);
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
 
-        // 1. Arkaplan
+        ctx.antialias = "subpixel";
+        ctx.patternQuality = "best";
+        ctx.quality = "best";
+
         const gradient = ctx.createLinearGradient(0, 0, 800, 300);
-        gradient.addColorStop(0, '#141E30');
-        gradient.addColorStop(1, '#243B55');
+        gradient.addColorStop(0, "#141E30");
+        gradient.addColorStop(1, "#243B55");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, 800, 300);
 
-        // 2. Avatar Yükleme
-        const defaultAvatar = "https://cdn.discordapp.com/embed/avatars/0.png";
-        let avatar;
-        try {
-            avatar = await loadImage(user.dynamicAvatarURL("png", 256));
-        } catch {
-            avatar = await loadImage(defaultAvatar);
-        }
-
-        // Avatarı Yuvarlak Kırpma
-        ctx.save();
+        ctx.fillStyle = "rgba(255,255,255,0.04)";
         ctx.beginPath();
-        ctx.arc(150, 150, 90, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.clip();
-
-        // Avatar Yüklenmezse Arkası Boş Kalmasın
-        ctx.fillStyle = '#2c3e50';
+        ctx.arc(760, 30, 180, 0, Math.PI * 2);
         ctx.fill();
 
-        if (avatar) ctx.drawImage(avatar, 60, 60, 180, 180);
-        ctx.restore();
+        await drawCircularAvatar(ctx, user.dynamicAvatarURL("png", 256), 150, 150, 90, "#f1c40f", 8);
 
-        // Avatar Çerçevesi
-        ctx.beginPath();
-        ctx.arc(150, 150, 90, 0, Math.PI * 2, true);
-        ctx.lineWidth = 8;
-        ctx.strokeStyle = '#f1c40f';
-        ctx.stroke();
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "left";
+        fitText(ctx, user.username, 470, 36);
+        ctx.fillText(truncateText(ctx, user.username, 470), 280, 90);
 
-        // --- SAĞ TARAF ---
+        ctx.fillStyle = "#f1c40f";
+        ctx.font = "bold 24px Arial";
+        ctx.fillText(`${texts.level || "Level"} ${userData.level}`, 280, 125);
 
-        // 3. Kullanıcı Adı
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 36px Arial';
-        ctx.textAlign = 'left';
-        ctx.fillText(user.username, 280, 90);
-
-        // 4. Seviye (Level)
-        ctx.fillStyle = '#f1c40f';
-        ctx.font = 'bold 24px Arial';
-        ctx.fillText(`${texts.level || 'Level'} ${userData.level}`, 280, 125);
-
-        // 5. XP Barı (SORUNLU KISIM BURADAYDI - DÜZELTİLDİ)
         const barY = 150;
+        const xpPercent = Math.min((userData.xp / Math.max(nextLevelXp, 1)), 1);
+        drawProgressBar(ctx, 280, barY, 460, 26, xpPercent, "#2ecc71", "#444");
 
-        // --- Arkaplan Barı ---
-        ctx.fillStyle = '#444';
-        ctx.beginPath(); // Yeni çizim başlat ki avatarla karışmasın!
-        if (ctx.roundRect) {
-            ctx.roundRect(280, barY, 460, 26, 10);
-            ctx.fill();
-        } else {
-            ctx.fillRect(280, barY, 460, 26);
-        }
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 16px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(`${userData.xp} / ${nextLevelXp} XP`, 510, barY + 18);
 
-        // --- Doluluk Barı ---
-        const xpPercent = Math.min((userData.xp / nextLevelXp), 1);
-        ctx.fillStyle = '#2ecc71'; // Yeşil
-        ctx.beginPath(); // Yeni çizim başlat!
-        if (ctx.roundRect) {
-            ctx.roundRect(280, barY, 460 * xpPercent, 26, 10);
-            ctx.fill();
-        } else {
-            ctx.fillRect(280, barY, 460 * xpPercent, 26);
-        }
-
-        // XP Sayısı
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 16px Arial';
-        ctx.fillText(`${userData.xp} / ${nextLevelXp} XP`, 460, barY + 19);
-
-        // 6. İstatistikler (Daireler)
         const statY = 240;
-        ctx.font = '20px Arial';
+        ctx.textAlign = "left";
+        ctx.font = "20px Arial";
 
-        // --- Cüzdan ---
-        ctx.fillStyle = '#f1c40f';
-        ctx.beginPath(); ctx.arc(290, statY - 6, 8, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#dfe6e9';
-        ctx.fillText(`${texts.wallet || 'Wallet'}: ${userData.balance}`, 310, statY);
+        ctx.fillStyle = "#f1c40f";
+        ctx.beginPath();
+        ctx.arc(290, statY - 6, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#dfe6e9";
+        ctx.fillText(`${texts.wallet || "Wallet"}: ${userData.balance}`, 310, statY);
 
-        // --- Galibiyet ---
-        ctx.fillStyle = '#00b894';
-        ctx.beginPath(); ctx.arc(490, statY - 6, 8, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#dfe6e9';
-        ctx.fillText(`${texts.wins || 'Wins'}: ${userData.wins}`, 510, statY);
+        ctx.fillStyle = "#00b894";
+        ctx.beginPath();
+        ctx.arc(490, statY - 6, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#dfe6e9";
+        ctx.fillText(`${texts.wins || "Wins"}: ${userData.wins}`, 510, statY);
 
-        // --- Mağlubiyet ---
-        ctx.fillStyle = '#d63031';
-        ctx.beginPath(); ctx.arc(650, statY - 6, 8, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#dfe6e9';
-        ctx.fillText(`${texts.losses || 'Loss'}: ${userData.losses}`, 670, statY);
+        ctx.fillStyle = "#d63031";
+        ctx.beginPath();
+        ctx.arc(650, statY - 6, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#dfe6e9";
+        ctx.fillText(`${texts.losses || "Loss"}: ${userData.losses}`, 670, statY);
 
-        return canvas.encode('jpeg', 90);
+        return canvas.encode("jpeg", 90);
     },
 
-    // 3. HOŞGELDİN / GÜLE GÜLE KARTI
-    drawWelcome: async (member, type, memberCount) => {
+    drawWelcome: async (member, type, memberCount, texts = {}) => {
         const canvas = createCanvas(800, 360);
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
+        const welcomeTexts = {
+            welcomeTitle: texts.welcomeTitle || "WELCOME",
+            goodbyeTitle: texts.goodbyeTitle || "GOODBYE",
+            welcomeCount: texts.welcomeCount || "We are now {count} members with you!",
+            goodbyeCount: texts.goodbyeCount || "We are now {count} members without you..."
+        };
 
-        // Arkaplan
+        ctx.antialias = "subpixel";
+        ctx.patternQuality = "best";
+        ctx.quality = "best";
+
         const gradient = ctx.createLinearGradient(0, 0, 800, 360);
         if (type === "welcome") {
-            gradient.addColorStop(0, '#11998e');  // Yeşilimsi (Giriş)
-            gradient.addColorStop(1, '#38ef7d');
+            gradient.addColorStop(0, "#11998e");
+            gradient.addColorStop(1, "#38ef7d");
         } else {
-            gradient.addColorStop(0, '#cb2d3e');  // Kırmızımsı (Çıkış)
-            gradient.addColorStop(1, '#ef473a');
+            gradient.addColorStop(0, "#cb2d3e");
+            gradient.addColorStop(1, "#ef473a");
         }
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, 800, 360);
 
-        // Dekoratif Desen (Opsiyonel Çizgiler)
         ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
         ctx.beginPath();
         ctx.arc(0, 0, 300, 0, Math.PI * 2);
@@ -228,55 +267,26 @@ module.exports = {
         ctx.arc(800, 360, 400, 0, Math.PI * 2);
         ctx.fill();
 
-        // Avatar
-        const defaultAvatar = "https://cdn.discordapp.com/embed/avatars/0.png";
-        let avatar;
-        try {
-            avatar = await loadImage(member.user ? member.user.dynamicAvatarURL("png", 256) : member.dynamicAvatarURL("png", 256));
-        } catch {
-            avatar = await loadImage(defaultAvatar);
-        }
+        const avatarUrl = member.user ? member.user.dynamicAvatarURL("png", 256) : member.dynamicAvatarURL("png", 256);
+        await drawCircularAvatar(ctx, avatarUrl, 400, 130, 80, "#ffffff", 8);
 
-        // Avatar Yuvarlağı
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(400, 130, 80, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.clip();
-        ctx.fillStyle = '#2c3e50';
-        ctx.fill();
-        ctx.drawImage(avatar, 320, 50, 160, 160);
-        ctx.restore();
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
 
-        // Avatar Çerçevesi
-        ctx.beginPath();
-        ctx.arc(400, 130, 80, 0, Math.PI * 2, true);
-        ctx.lineWidth = 8;
-        ctx.strokeStyle = '#ffffff';
-        ctx.stroke();
-
-        // Yazılar
-        ctx.fillStyle = '#ffffff';
-        ctx.textAlign = 'center';
-
-        // Başlık
-        ctx.font = 'bold 50px Arial';
-        const title = type === "welcome" ? "HOŞGELDİN" : "GÜLE GÜLE";
+        const title = type === "welcome" ? welcomeTexts.welcomeTitle : welcomeTexts.goodbyeTitle;
+        fitText(ctx, title, 700, 50);
         ctx.fillText(title, 400, 260);
 
-        // Kullanıcı Adı
-        ctx.font = '35px Arial';
         const username = member.user ? member.user.username : member.username;
-        ctx.fillText(username, 400, 305);
+        fitText(ctx, username, 680, 35, "bold");
+        ctx.fillText(truncateText(ctx, username, 680), 400, 305);
 
-        // Üye Sayısı
-        ctx.font = '20px Arial';
-        ctx.fillStyle = '#f1f2f6';
-        const countText = type === "welcome"
-            ? `Seninle birlikte ${memberCount} kişi olduk!`
-            : `Sensiz ${memberCount} kişi kaldık...`;
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "#f1f2f6";
+        const countText = (type === "welcome" ? welcomeTexts.welcomeCount : welcomeTexts.goodbyeCount)
+            .replace("{count}", memberCount);
         ctx.fillText(countText, 400, 340);
 
-        return canvas.encode('jpeg', 90);
+        return canvas.encode("jpeg", 90);
     }
 };

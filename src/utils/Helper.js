@@ -1,6 +1,4 @@
 const axios = require("axios");
-const crypto = require("crypto");
-const {models} = require("mongoose");
 
 const yes = ["evet", "kabul ediyorum", "ediyorum", "evt", "yes", "y", "e"]
 const no = ["hayır", "kabul etmiyorum", "etmiyorum", "hyr", "no", "n", "h"]
