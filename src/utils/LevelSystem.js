@@ -1,5 +1,6 @@
 const ServerLevel = require("../database/models/ServerLevel");
 const translate = require("./Translate");
+const DropEngine = require('./DropEngine')
 
 const messageCache = new Map();
 
@@ -40,6 +41,8 @@ module.exports = {
         if (messages.length > 100) messages.shift();
 
         messageCache.set(guildId, messages);
+
+        DropEngine.attemptAutoDrop(bot, guildData, message.channel.id, messages.length);
 
         if (activityMultiplier === 0) return;
         if (earnedXP <= 0) return;

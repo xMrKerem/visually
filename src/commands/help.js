@@ -64,7 +64,7 @@ module.exports = {
                 label: translate("CAT_SYS", lang),
                 description: translate("CAT_SYS_DESC", lang),
                 emoji: "⚙️",
-                commands: ["autorole", "welcome", "language", "prefix", "log", "slang"]
+                commands: ["autorole", "welcome", "language", "prefix", "log", "slang", "adminDrop", "dropSystem"]
             }
         };
 
