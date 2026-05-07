@@ -1,9 +1,10 @@
-const FightSystem = require("../utils/FightSystem");
+const FightEngine = require("../utils/FightEngine");
 const CanvasUtil = require("../utils/CanvasUtil");
 const translate = require("../utils/Translate");
 const LevelSystem = require("../utils/LevelSystem");
 const User = require("../database/models/User");
 const StoreItem = require("../database/models/StoreItem");
+const RankEngine = require("../utils/RankEngine");
 
 async function getEquippedStats(userId) {
     let totalStats = {
@@ -55,7 +56,7 @@ async function handleDurability(userId, bot, channelId, lang) {
             let invItem = userDB.inventory[invItemIndex];
 
             if (invItem.usageLimit > 0) {
-                invItem.usageLimit -= 1;
+                invItem.usageLimit--;
                 inventoryModified = true;
 
                 if (invItem.usageLimit <= 0) {
@@ -63,7 +64,7 @@ async function handleDurability(userId, bot, channelId, lang) {
                     userDB.equipment[slot] = null;
 
                     if (invItem.amount > 1) {
-                        invItem.amount -= 1;
+                        invItem.amount--;
                         const storeData = await StoreItem.findOne({ itemId: invItem.itemId });
                         invItem.usageLimit = storeData ? storeData.usageLimit : 1;
                     } else {
@@ -198,7 +199,7 @@ module.exports = {
                 stats: p2Stats
             };
 
-            const game = new FightSystem(p1Data, p2Data, translate, lang);
+            const game = new FightEngine(p1Data, p2Data, translate, lang);
 
             let gameTimeoutTimer;
             const resetGameTimer = () => {
@@ -286,36 +287,38 @@ module.exports = {
 
                     const winnerId = result.winner.id;
                     const loserId = (winnerId === p1Data.id) ? p2Data.id : p1Data.id;
-
-                    const prizeCoin = Math.floor(Math.random() * 201) + 150;
-                    const prizeXp = Math.floor(Math.random() * 201) + 150;
+                    const turnCount = Math.floor(game.log.length / 2) + 1;
 
                     try {
-                        let winnerUser = await User.findOne({ userId: winnerId });
-                        if (!winnerUser) winnerUser = new User({ userId: winnerId });
-
-                        winnerUser.balance += prizeCoin;
-                        winnerUser.wins += 1;
-
-                        const leveledUp = await LevelSystem.addXp(winnerUser, prizeXp);
-
-                        let loserUser = await User.findOne({ userId: loserId });
-                        if (!loserUser) loserUser = new User({ userId: loserId });
-
-                        loserUser.losses += 1;
-                        await LevelSystem.addXp(loserUser, Math.floor(Math.random() * 11) + 10);
+                        const rewards = await RankEngine.calculateMatchRewards(
+                            winnerId,
+                            loserId,
+                            turnCount,
+                            result.winner.hp,
+                            result.winner.maxHp
+                        );
 
                         let msgText = translate("DUEL_WIN_PRIZE", lang, {
-                            winner: result.winner.id,
-                            prize: prizeCoin,
-                            xp: prizeXp
+                            winner: winnerId,
+                            prize: rewards.earnedCoin,
+                            xp: rewards.earnedKp
                         });
 
-                        if (leveledUp) {
-                            msgText += translate("LEVEL_UP_MSG", lang, {
-                                user: result.winner.name,
-                                level: winnerUser.level
-                            });
+                        msgText = msgText.replace(/XP/g, "KP").replace(/xp/g, "kp");
+
+                        if (rewards.winnerRankedUp) {
+                            msgText += `\n${translate("DUEL_RANK_UP", lang, {
+                                rank: RankEngine.getRankName(rewards.newWinnerTier, translate, lang)
+                            })}`;
+                        }
+
+                        if (rewards.shieldBroken) {
+                            msgText += `\n${translate("DUEL_SHIELD_BROKEN", lang, { user: loserId })}`;
+                        } else if (rewards.loserRankedDown) {
+                            msgText += `\n${translate("DUEL_RANK_DOWN", lang, {
+                                user: loserId,
+                                rank: RankEngine.getRankName(rewards.newLoserTier, translate, lang)
+                            })}`;
                         }
 
                         bot.createMessage(msgOrInteraction.channel.id, msgText);

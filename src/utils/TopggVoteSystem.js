@@ -21,7 +21,7 @@ const claimVoteChest = async (user, voteChestItem) => {
 
     const alreadyHas = user.inventory.find((i) => i.itemId === voteChestItem.itemId);
     if (alreadyHas) {
-        alreadyHas.amount += 1;
+        alreadyHas.amount++;
     } else {
         user.inventory.push({
             itemId: voteChestItem.itemId,

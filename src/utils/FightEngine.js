@@ -1,6 +1,6 @@
 const helper = require('./Helper');
 
-class FightSystem {
+class FightEngine {
     constructor(player1, player2, translate, lang) {
         const defaultStats = {
             atcMinDmg: 0, atcMaxDmg: 0,
@@ -68,7 +68,7 @@ class FightSystem {
                 player.isStunned = true;
                 turnLogs.push(this.translate("EFFECT_STUNNED", this.lang, { player: player.name }));
             }
-            effect.turnsLeft -= 1;
+            effect.turnsLeft--;
         });
 
         player.activeEffects = player.activeEffects.filter(eff => eff.turnsLeft > 0);
@@ -286,7 +286,7 @@ class FightSystem {
                 defender.activeEffects = [];
 
                 const reviveMsg = this.translate("DUEL_REVIVE_PHOENIX", this.lang, { player: defender.name });
-                this.log.push(`\nâ¤ï¸â€ğŸ”¥ ${reviveMsg}`);
+                this.log.push(reviveMsg);
             } else {
                 this.isFinished = true;
                 return { finished: true, winner: attacker, msg: lastMessage };
@@ -298,4 +298,4 @@ class FightSystem {
     }
 }
 
-module.exports = FightSystem;
+module.exports = FightEngine;

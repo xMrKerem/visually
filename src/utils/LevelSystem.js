@@ -56,7 +56,7 @@ module.exports = {
 
         while (serverLevel.xp >= nextLevelXp) {
             serverLevel.xp -= nextLevelXp;
-            serverLevel.level += 1;
+            serverLevel.level++;
             nextLevelXp = module.exports.calculateNextLevelXP(serverLevel.level)
             leveledUp = true;
         }
@@ -97,7 +97,10 @@ module.exports = {
             } else {
                 try {
                     const dmChannel = await bot.getDMChannel(userId);
-                    await bot.createMessage(dmChannel.id, `**${message.channel.guild.name}** Level:\n${text}`);
+                    await bot.createMessage(dmChannel.id, translate("LEVEL_DM_PREFIX", lang, {
+                        guild: message.channel.guild.name,
+                        text
+                    }));
                 } catch (e) {}
             }
         }

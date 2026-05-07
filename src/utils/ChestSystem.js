@@ -1,5 +1,6 @@
 const StoreItem = require("../database/models/StoreItem");
 const helper = require("./Helper");
+const translate = require("./Translate");
 
 const weightedPick = (items = []) => {
     const total = items.reduce((sum, item) => sum + (item.chance || 0), 0);
@@ -49,7 +50,7 @@ const addItemToInventory = (user, storeItem, amount = 1) => {
 };
 
 const removeChestFromInventory = (user, inventoryItem, chestStoreItem) => {
-    inventoryItem.amount -= 1;
+    inventoryItem.amount--;
     if (inventoryItem.amount <= 0) {
         user.inventory = user.inventory.filter((item) => !isSameInventoryItem(item, chestStoreItem));
     }
@@ -85,7 +86,9 @@ const pickVoteExclusiveReward = async () => {
     return candidates[Math.floor(Math.random() * candidates.length)];
 };
 
-const resolveCoinReward = (entry) => {
+const formatRewardLabel = (item, lang = "en") => `${item.emoji} ${item.name[lang] || item.name.en || item.name.tr}`;
+
+const resolveCoinReward = (entry, lang = "en") => {
     const outcome = weightedPick(entry.outcomes || []);
     if (!outcome) return null;
 
@@ -93,11 +96,11 @@ const resolveCoinReward = (entry) => {
     return {
         type: "coin",
         amount,
-        label: `${amount} Coin`
+        label: `${amount} ${translate("COIN", lang)}`
     };
 };
 
-const resolveChestDropReward = async (entry) => {
+const resolveChestDropReward = async (entry, lang = "en") => {
     const outcome = weightedPick(entry.outcomes || []);
     if (!outcome || !outcome.chestId) return null;
 
@@ -108,11 +111,11 @@ const resolveChestDropReward = async (entry) => {
         type: "item",
         item: chestItem,
         amount: 1,
-        label: `${chestItem.emoji} ${chestItem.name.en}`
+        label: formatRewardLabel(chestItem, lang)
     };
 };
 
-const resolveReward = async (entry) => {
+const resolveReward = async (entry, lang = "en") => {
     if (!entry) return null;
 
     if (["common", "rare", "epic", "legendary"].includes(entry.type)) {
@@ -123,16 +126,16 @@ const resolveReward = async (entry) => {
             type: "item",
             item: rewardItem,
             amount: 1,
-            label: `${rewardItem.emoji} ${rewardItem.name.en}`
+            label: formatRewardLabel(rewardItem, lang)
         };
     }
 
     if (entry.type === "coin") {
-        return resolveCoinReward(entry);
+        return resolveCoinReward(entry, lang);
     }
 
     if (entry.type === "chest_drop") {
-        return await resolveChestDropReward(entry);
+        return await resolveChestDropReward(entry, lang);
     }
 
     if (entry.type === "vote_exclusive") {
@@ -142,21 +145,21 @@ const resolveReward = async (entry) => {
                 type: "item",
                 item: rewardItem,
                 amount: 1,
-                label: `${rewardItem.emoji} ${rewardItem.name.en}`
+                label: formatRewardLabel(rewardItem, lang)
             };
         }
 
         return {
             type: "coin",
             amount: 2500,
-            label: "2500 Coin"
+            label: `2500 ${translate("COIN", lang)}`
         };
     }
 
     return null;
 };
 
-const openChest = async (user, chestStoreItem) => {
+const openChest = async (user, chestStoreItem, lang = "en") => {
     if (!user || !chestStoreItem || chestStoreItem.category !== "chest") {
         throw new Error("Invalid chest data.");
     }
@@ -174,7 +177,7 @@ const openChest = async (user, chestStoreItem) => {
     }
 
     const rewardEntry = weightedPick(contents);
-    const reward = await resolveReward(rewardEntry);
+    const reward = await resolveReward(rewardEntry, lang);
     if (!reward) {
         throw new Error("Reward could not be resolved.");
     }

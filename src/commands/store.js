@@ -316,8 +316,8 @@ module.exports = {
                         flags: 64
                     });
                 } catch (error) {
-                    console.error("[Store] Check Vote Buton Hatası:", error); // Eğer yine çalışmazsa konsolda bize faili gösterecek!
-                    return interaction.createMessage({ content: "Sistemsel bir hata oluştu, lütfen yapımcıya bildirin.", flags: 64 });
+                    console.error("[Store] Check Vote Buton Hatası:", error);
+                    return interaction.createMessage({ content: translate("STORE_VOTE_CHECK_ERROR", lang), flags: 64 });
                 }
             }
 
@@ -364,7 +364,7 @@ module.exports = {
                 user.balance -= item.price;
 
                 if (alreadyHas) {
-                    alreadyHas.amount += 1;
+                    alreadyHas.amount++;
                 } else {
                     user.inventory.push({
                         itemId: item.itemId,
@@ -387,8 +387,8 @@ module.exports = {
                 currentCategory = interaction.data.values[0];
                 currentPage = 1;
             } else {
-                if (interaction.data.custom_id === "forward") currentPage += 1;
-                if (interaction.data.custom_id === "backward") currentPage -= 1;
+                if (interaction.data.custom_id === "forward") currentPage++;
+                if (interaction.data.custom_id === "backward") currentPage--;
                 if (interaction.data.custom_id === "last") currentPage = maxPages;
                 if (interaction.data.custom_id === "first") currentPage = 1;
             }
