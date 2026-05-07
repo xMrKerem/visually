@@ -1,8 +1,6 @@
 const Guild = require("../database/models/Guild");
-const User = require("../database/models/User");
 const LevelSystem = require("../utils/LevelSystem");
 const translate = require("../utils/Translate");
-const talkedRecently = new Set();
 const AIHandler = require("../utils/AIHandler");
 
 function calculatePermLevel(member) {
@@ -13,7 +11,7 @@ function calculatePermLevel(member) {
     if (member.permissions.has("banMembers")) permLevel = 3;
     if (member.permissions.has("administrator")) permLevel = 4;
     if (member.id === process.env.OWNER_ID) permLevel = 5;
-        return permLevel;
+    return permLevel;
 }
 
 module.exports = {
@@ -31,27 +29,7 @@ module.exports = {
         const prefix = guildData.prefix || process.env.PREFIX;
         const slangMode = guildData.slangMode || false;
 
-        if (!talkedRecently.has(message.author.id)) {
-            let user = await User.findOne({ userId: message.author.id });
-            if (!user) {
-                user = new User({ userId: message.author.id, userName: message.author.username });
-            }
-
-            const randomXp = Math.floor(Math.random() * 11) + 10;
-            const result = await LevelSystem.addXp(user, randomXp);
-
-            if (result.leveledUp) {
-                bot.createMessage(message.channel.id, translate("LEVEL_UP_MSG", lang, {
-                    user: `<@${message.author.id}>`,
-                    level: result.currentLevel
-                }));
-            }
-
-            talkedRecently.add(message.author.id);
-            setTimeout(() => {
-                talkedRecently.delete(message.author.id);
-            }, 15000);
-        }
+        LevelSystem.handleLevelXP(bot, message, guildData).catch(console.error);
 
         if (message.mentions.find(u => u.id === bot.user.id)) {
             const cleanMessage = message.content.replace(/<@!?[0-9]+>/g, "").trim();
