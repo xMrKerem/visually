@@ -40,6 +40,33 @@ const guildSchema = new mongoose.Schema({
     slangMode: {
         type: Boolean,
         default: false
+    },
+
+    xpMultiplier: {
+        type: Number,
+        default: 1.0
+    },
+
+    levelLogChannel: {
+        type: String,
+        default: null
+    },
+
+    roleBehavior: {
+        type: String,
+        enum: ["stack", "replace"],
+        default: "replace"
+    },
+
+    isDropsEnabled: {
+        type: Boolean,
+        default: true
+    },
+
+    levelRoles: {
+        type: Map,
+        of: String,
+        default: {}
     }
 });
 

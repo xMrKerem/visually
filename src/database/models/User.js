@@ -23,14 +23,19 @@ const userSchema = new mongoose.Schema({
         default: null
     },
 
-    xp: {
+    kp: {
         type: Number,
         default: 0
     },
 
-    level: {
+    rankTier: {
         type: Number,
         default: 1
+    },
+
+    shield: {
+        type: Boolean,
+        default: false
     },
 
     wins: {
