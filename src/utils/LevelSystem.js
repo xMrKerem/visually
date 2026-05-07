@@ -22,7 +22,7 @@ const calculateActivityMultiplier = (guildId, userId) => {
 
 module.exports = {
     calculateNextLevelXP: (level) => {
-        return Math.floor(5 * (level * level) + 50 * level + 100);
+        return Math.floor(25 * (level * level) + 150 * level + 100);
     },
 
     handleLevelXP: async (bot, message, guildData) => {
@@ -32,7 +32,7 @@ module.exports = {
         let messages = messageCache.get(guildId) || [];
         const activityMultiplier = calculateActivityMultiplier(guildId, userId);
         const guildMultiplier = guildData.xpMultiplier || 1.0;
-        const baseXP = Math.min(messageLength / 10, 50);
+        const baseXP = 10 + Math.min(messageLength / 2, 150);
         const earnedXP = Math.floor(baseXP * activityMultiplier * guildMultiplier);
 
         messages.push({ userId, timestamp: Date.now(), length: messageLength });
