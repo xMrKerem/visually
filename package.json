@@ -1,6 +1,6 @@
 {
   "name": "visually",
-  "version": "2.1.1",
+  "version": "2.2",
   "description": "A multilingual visual-first Discord bot built with Eris and MongoDB.",
   "main": "index.js",
   "author": "xMrKerem",
@@ -32,7 +32,7 @@
     "mongoose": "^9.6.1"
   },
   "devDependencies": {
-    "eslint": "^9.0.0",
-    "nodemon": "^3.0.0"
+    "eslint": "^10.3.0",
+    "nodemon": "^3.1.14"
   }
 }

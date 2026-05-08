@@ -1,127 +1,165 @@
 const User = require("../database/models/User");
+const ServerLevel = require("../database/models/ServerLevel");
+const RankEngine = require("../utils/RankEngine");
 const translate = require("../utils/Translate");
+const tr = require("../locales/tr.json");
+const en = require("../locales/en.json");
+
+const getLocalization = (keyname) => ({ tr: tr[keyname] });
+
+const getMedal = (index) => {
+    if (index === 0) return "🥇";
+    if (index === 1) return "🥈";
+    if (index === 2) return "🥉";
+    return `**#${index + 1}**`;
+};
 
 module.exports = {
     name: "leaderboard",
-    aliases: ["top", "sıralama", "rank"],
+    aliases: ["top", "sıralama", "rank", "lb"],
     displayName: "CMD_NAME_LEADERBOARD",
     description: "CMD_DESC_LEADERBOARD",
     permLevel: 0,
 
     slashCommand: {
         name: "leaderboard",
-        name_localizations: { "tr": "sıralama" },
-        description: "Show the top 10 players.",
-        description_localizations: { "tr": "En iyi 10 oyuncuyu göster." },
+        name_localizations: getLocalization("CMD_NAME_LEADERBOARD"),
+        description: en.CMD_DESC_LEADERBOARD,
+        description_localizations: getLocalization("CMD_DESC_LEADERBOARD"),
         type: 1
     },
 
     execute: async (bot, msgOrInteraction, args, guildData) => {
         const lang = guildData ? guildData.language : "en";
-        const guild = bot.guilds.get(msgOrInteraction.guildID);
+        const guildId = msgOrInteraction.guildID;
+        const isSlash = Boolean(msgOrInteraction.acknowledge);
+
+        if (!guildId) {
+            return isSlash
+                ? msgOrInteraction.createMessage({ content: translate("ONLY_GUILD_ERROR", lang), flags: 64 })
+                : bot.createMessage(msgOrInteraction.channel.id, translate("ONLY_GUILD_ERROR", lang));
+        }
+
+        const guild = bot.guilds.get(guildId);
+
+        const resolveUsername = async (userId, fallbackName) => {
+            if (
+                fallbackName &&
+                fallbackName !== "undefined" &&
+                fallbackName !== translate("LEADERBOARD_UNKNOWN_USER", lang, { user: userId }) &&
+                fallbackName !== translate("LEADERBOARD_HIDDEN_USER", lang, { user: userId })
+            ) {
+                return fallbackName;
+            }
+
+            try {
+                let discordUser = bot.users.get(userId);
+
+                if (!discordUser && guild) {
+                    const member = guild.members.get(userId);
+                    if (member) discordUser = member.user || member;
+                }
+
+                if (!discordUser) {
+                    discordUser = await bot.getRESTUser(userId).catch(() => null);
+                }
+
+                return discordUser
+                    ? discordUser.username
+                    : translate("LEADERBOARD_HIDDEN_USER", lang, { user: userId });
+            } catch (e) {
+                return translate("LEADERBOARD_UNKNOWN_USER", lang, { user: userId });
+            }
+        };
+
+        const formatServerLevelEntry = async (userDoc, index) => {
+            const username = await resolveUsername(userDoc.userId, null);
+            return `${getMedal(index)} **${username}**\n└ ${translate("LEADERBOARD_LEVEL_LABEL", lang)}: **${userDoc.level}** | ${translate("LEADERBOARD_XP_LABEL", lang)}: **${userDoc.xp}**`;
+        };
+
+        const formatRankEntry = async (userDoc, index) => {
+            const username = await resolveUsername(userDoc.userId, userDoc.userName);
+            const rankName = RankEngine.getRankName(userDoc.rankTier, translate, lang);
+            return `${getMedal(index)} **${username}**\n└ ${translate("LEADERBOARD_RANK_LABEL", lang)}: **${rankName}** | ${translate("LEADERBOARD_KP_LABEL", lang)}: **${userDoc.kp}** | ${translate("LEADERBOARD_WL_LABEL", lang)}: **${userDoc.wins}/${userDoc.losses}**`;
+        };
 
         const generateLeaderboard = async (type) => {
-            let topUsers = [];
             let title = "";
+            let entries = [];
 
-            if (type === "global") {
-                topUsers = await User.find().sort({ level: -1, xp: -1 }).limit(10);
-                title = translate("LEADERBOARD_GLOBAL", lang);
+            if (type === "server_level") {
+                title = translate("LEADERBOARD_SERVER_LEVEL", lang);
+                const topUsers = await ServerLevel.find({ guildId })
+                    .sort({ level: -1, xp: -1, userId: 1 })
+                    .limit(10);
+
+                if (!topUsers.length) {
+                    return { title, desc: translate("LEADERBOARD_EMPTY", lang) };
+                }
+
+                entries = await Promise.all(topUsers.map((userDoc, index) => formatServerLevelEntry(userDoc, index)));
+            } else if (type === "server_rank") {
+                title = translate("LEADERBOARD_SERVER_RANK", lang);
+
+                const serverLevelDocs = await ServerLevel.find({ guildId }).select("userId");
+                const serverUserIds = serverLevelDocs.map((doc) => doc.userId);
+                const topUsers = await User.find({ userId: { $in: serverUserIds } })
+                    .sort({ rankTier: -1, kp: -1, wins: -1, losses: 1, userId: 1 })
+                    .limit(10);
+
+                if (!topUsers.length) {
+                    return { title, desc: translate("LEADERBOARD_EMPTY", lang) };
+                }
+
+                entries = await Promise.all(topUsers.map((userDoc, index) => formatRankEntry(userDoc, index)));
             } else {
-                if (!guild) return {
-                    error: true,
-                    text: translate("ONLY_GUILD_ERROR", lang)
-                };
+                title = translate("LEADERBOARD_GLOBAL_RANK", lang);
 
-                try {
-                    await guild.fetchAllMembers(2000);
-                } catch(e) {}
+                const topUsers = await User.find()
+                    .sort({ rankTier: -1, kp: -1, wins: -1, losses: 1, userId: 1 })
+                    .limit(10);
 
-                const memberIds = guild.members.map(m => m.id);
-                topUsers = await User.find({ userId: { $in: memberIds } }).sort({ level: -1, xp: -1 }).limit(10);
-                title = translate("LEADERBOARD_SERVER", lang);
-            }
-
-            if (topUsers.length === 0) {
-                return {
-                    embed: {
-                        title: title,
-                        description: translate("LEADERBOARD_EMPTY", lang),
-                        color: 0xffd700
-                    }
-                };
-            }
-
-            const promises = topUsers.map(async (u, i) => {
-                let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `**#${i + 1}**`;
-                let displayUsername = u.userId;
-
-                if (u.username && u.username !== "Bilinmeyen" && u.username !== "undefined") {
-                    displayUsername = u.username;
-                } else {
-                    try {
-                        let discordUser = bot.users.get(u.userId);
-
-                        if (!discordUser && guild) {
-                            const member = guild.members.get(u.userId);
-                            if (member) discordUser = member.user || member;
-                        }
-
-                        if (!discordUser) {
-                            discordUser = await bot.getRESTUser(u.userId);
-                        }
-
-                        displayUsername = discordUser ? discordUser.username : `Gizli Kullanıcı (${u.userId})`;
-                    } catch (e) {
-                        displayUsername = `Bilinmeyen (${u.userId})`;
-                    }
+                if (!topUsers.length) {
+                    return { title, desc: translate("LEADERBOARD_EMPTY", lang) };
                 }
 
-                return `${medal} **${displayUsername}** \n└ 🔰 Lvl: **${u.level}** | ⚔️ Win: **${u.wins}**\n\n`;
-            });
+                entries = await Promise.all(topUsers.map((userDoc, index) => formatRankEntry(userDoc, index)));
+            }
 
-            const results = await Promise.all(promises);
-            const desc = results.join("");
-
-            return {
-                embed: {
-                    title: title,
-                    description: desc,
-                    color: 0xffd700,
-                }
-            };
+            return { title, desc: entries.join("\n\n") };
         };
 
         const components = [{
             type: 1,
-            components: [
-                { type: 2, style: 1, label: translate("BTN_SERVER", lang), custom_id: "lb_server", emoji: { name: "🏠" } },
-                { type: 2, style: 2, label: translate("BTN_GLOBAL", lang), custom_id: "lb_global", emoji: { name: "🌍" } }
-            ]
+            components: [{
+                type: 3,
+                custom_id: "leaderboard_select",
+                placeholder: translate("LEADERBOARD_PLACEHOLDER", lang),
+                options: [
+                    { label: translate("LEADERBOARD_SERVER_LEVEL", lang), value: "server_level", emoji: { name: "🏆" } },
+                    { label: translate("LEADERBOARD_SERVER_RANK", lang), value: "server_rank", emoji: { name: "⚔️" } },
+                    { label: translate("LEADERBOARD_GLOBAL_RANK", lang), value: "global_rank", emoji: { name: "🌍" } }
+                ]
+            }]
         }];
 
-        const initialType = guild ? "server" : "global";
-        const initialData = await generateLeaderboard(initialType);
-
-        if (initialData.error) {
-            if (msgOrInteraction.createMessage && !msgOrInteraction.author) {
-                return msgOrInteraction.createMessage({ content: initialData.text, flags: 64 });
-            } else {
-                return bot.createMessage(msgOrInteraction.channel.id, { content: initialData.text });
-            }
-        }
-
-        let message;
-        const payload = {
-            embed: initialData.embed,
-            components: components
+        const initialData = await generateLeaderboard("server_level");
+        const embed = {
+            title: initialData.title,
+            description: initialData.desc,
+            color: 0xffd700
         };
 
-        if (msgOrInteraction.createMessage && !msgOrInteraction.author) {
-            await msgOrInteraction.createMessage(payload);
+        let message;
+        if (isSlash) {
+            if (!msgOrInteraction.acknowledged) {
+                await msgOrInteraction.acknowledge();
+            }
+
+            await msgOrInteraction.createFollowup({ embed, components });
             message = await msgOrInteraction.getOriginalMessage();
         } else {
-            message = await bot.createMessage(msgOrInteraction.channel.id, payload);
+            message = await bot.createMessage(msgOrInteraction.channel.id, { embed, components });
         }
 
         const listener = async (interaction) => {
@@ -136,16 +174,13 @@ module.exports = {
 
             await interaction.deferUpdate();
 
-            let newType = "global";
-            if (interaction.data.custom_id === "lb_server") newType = "server";
-            else if (interaction.data.custom_id === "lb_global") newType = "global";
+            const selection = interaction.data.values[0];
+            const newData = await generateLeaderboard(selection);
 
-            const newData = await generateLeaderboard(newType);
+            embed.title = newData.title;
+            embed.description = newData.desc;
 
-            await interaction.editOriginalMessage({
-                embed: newData.embed,
-                components: components
-            });
+            await interaction.editOriginalMessage({ embed, components });
         };
 
         bot.on("interactionCreate", listener);
@@ -154,7 +189,7 @@ module.exports = {
             bot.removeListener("interactionCreate", listener);
             try {
                 bot.editMessage(message.channel.id, message.id, { components: [] });
-            } catch(e) {}
+            } catch (e) {}
         }, 120000);
     }
 };

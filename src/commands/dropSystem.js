@@ -6,21 +6,21 @@ const en = require("../locales/en.json");
 const getLocalization = (keyname) => ({ tr: tr[keyname] });
 
 module.exports = {
-    name: "dropayar",
-    aliases: ["toggledrop", "dropaç", "dropkapat"],
+    name: "setdrop",
+    aliases: ["toggledrop", "dropaç", "dropkapat", "dropayar"],
     displayName: "CMD_NAME_DROPSYSTEM",
     description: "CMD_DESC_DROPSYSTEM",
     permLevel: 4,
 
     slashCommand: {
-        name: "dropayar",
-        name_localizations: getLocalization("CMD_NAME_DROPSYSTEM"),
+        name: "dropsystem",
+        name_localizations: { tr: tr.CMD_NAME_DROPSYSTEM },
         description: en.CMD_DESC_DROPSYSTEM,
         description_localizations: getLocalization("CMD_DESC_DROPSYSTEM"),
         options: [
             {
-                name: "durum",
-                name_localizations: { en: "status" },
+                name: "status",
+                name_localizations: { tr: "durum" },
                 description: en.DROPSYSTEM_OPTION_STATUS,
                 description_localizations: getLocalization("DROPSYSTEM_OPTION_STATUS"),
                 type: 5,
@@ -50,7 +50,7 @@ module.exports = {
         };
 
         if (isSlash) {
-            const statusOption = msgOrInteraction.data?.options?.find((option) => option.name === "durum");
+            const statusOption = msgOrInteraction.data?.options?.find((option) => option.name === "status");
             isEnabled = statusOption ? statusOption.value : null;
         } else {
             if (!args || args.length === 0) {

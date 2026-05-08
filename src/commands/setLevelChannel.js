@@ -18,8 +18,8 @@ module.exports = {
         description_localizations: getLocalization("CMD_DESC_SETLEVELCHANNEL"),
         options: [
             {
-                name: "kanal",
-                name_localizations: { en: "channel" },
+                name: "channel",
+                name_localizations: { tr: "kanal" },
                 description: en.SETLEVELCHANNEL_OPTION_CHANNEL,
                 description_localizations: getLocalization("SETLEVELCHANNEL_OPTION_CHANNEL"),
                 type: 7,
@@ -33,7 +33,7 @@ module.exports = {
         const lang = guildData ? guildData.language : "en";
         if (!msgOrInteraction.acknowledge) return;
 
-        const channelOption = msgOrInteraction.data?.options?.find((option) => option.name === "kanal") || null;
+        const channelOption = msgOrInteraction.data?.options?.find((option) => option.name === "channel") || null;
         const guildId = msgOrInteraction.guildID;
 
         if (!guildId) {

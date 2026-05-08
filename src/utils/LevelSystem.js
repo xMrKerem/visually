@@ -50,7 +50,7 @@ module.exports = {
         const serverLevel = await ServerLevel.findOneAndUpdate(
             { userId, guildId },
             { $setOnInsert: { level: 1 } },
-            { upsert: true, new: true, setDefaultsOnInsert: true }
+            { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
         );
 
         serverLevel.xp += earnedXP;

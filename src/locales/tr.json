@@ -455,5 +455,17 @@
   "SETLEVELCHANNEL_INVALID": "Bu komut için geçerli bir sunucu belirlenemedi.",
   "SETLEVELCHANNEL_TITLE": "💬 Level Log Kanalı",
   "SETLEVELCHANNEL_STATUS_SET": "Seviye atlama mesajları artık <#{channel}> kanalına gönderilecek.",
-  "SETLEVELCHANNEL_STATUS_RESET": "Seviye atlama kanalı sıfırlandı. Tebrik mesajları artık kullanıcılara **DM** üzerinden gönderilecek."
+  "SETLEVELCHANNEL_STATUS_RESET": "Seviye atlama kanalı sıfırlandı. Tebrik mesajları artık kullanıcılara **DM** üzerinden gönderilecek.",
+  "LEADERBOARD_PLACEHOLDER": "Sıralama kategorisi seç",
+  "LEADERBOARD_SERVER_LEVEL": "🏆 Sunucu Seviye Sıralaması",
+  "LEADERBOARD_SERVER_RANK": "⚔️ Sunucu Rank Sıralaması",
+  "LEADERBOARD_GLOBAL_RANK": "🌍 Global Rank Sıralaması",
+  "LEADERBOARD_LEVEL_LABEL": "Seviye",
+  "LEADERBOARD_XP_LABEL": "XP",
+  "LEADERBOARD_RANK_LABEL": "Rank",
+  "LEADERBOARD_KP_LABEL": "KP",
+  "LEADERBOARD_WIN_LABEL": "Galibiyet",
+  "LEADERBOARD_HIDDEN_USER": "Gizli Kullanıcı ({user})",
+  "LEADERBOARD_UNKNOWN_USER": "Bilinmeyen Kullanıcı ({user})",
+  "LEADERBOARD_WL_LABEL": "G/M"
 }

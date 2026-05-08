@@ -14,11 +14,13 @@ module.exports = {
 
     slashCommand: {
         name: "admindrop",
+        name_localizations: getLocalization("CMD_NAME_ADMINDROP"),
         description: en.CMD_DESC_ADMINDROP,
         description_localizations: getLocalization("CMD_DESC_ADMINDROP"),
         options: [
             {
                 name: "type",
+                name_localizations: { tr: "tur" },
                 description: en.ADMINDROP_OPTION_TYPE,
                 description_localizations: getLocalization("ADMINDROP_OPTION_TYPE"),
                 type: 3,
@@ -26,11 +28,12 @@ module.exports = {
                 choices: [
                     { name: "XP", value: "xp" },
                     { name: "Coin", value: "coin" },
-                    { name: "Promo Code", value: "promo" }
+                    { name: "Promo Code", value: "promo", name_localizations: { tr: "Promo Kod" } }
                 ]
             },
             {
                 name: "value",
+                name_localizations: { tr: "deger" },
                 description: en.ADMINDROP_OPTION_VALUE,
                 description_localizations: getLocalization("ADMINDROP_OPTION_VALUE"),
                 type: 3,
@@ -38,6 +41,7 @@ module.exports = {
             },
             {
                 name: "itemname",
+                name_localizations: { tr: "esyaadi" },
                 description: en.ADMINDROP_OPTION_ITEMNAME,
                 description_localizations: getLocalization("ADMINDROP_OPTION_ITEMNAME"),
                 type: 3,

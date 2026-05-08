@@ -24,8 +24,8 @@ module.exports = {
     },
 
     calculateMatchRewards: async (winnerId, loserId, turnCount, winnerRemainingHp, winnerMaxHp) => {
-        const winner = await User.findOneAndUpdate({ userId: winnerId }, { $setOnInsert: { userId: winnerId } }, { upsert: true, new: true, setDefaultsOnInsert: true });
-        const loser = await User.findOneAndUpdate({ userId: loserId }, { $setOnInsert: { userId: loserId } }, { upsert: true, new: true, setDefaultsOnInsert: true });
+        const winner = await User.findOneAndUpdate({ userId: winnerId }, { $setOnInsert: { userId: winnerId } }, { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true });
+        const loser = await User.findOneAndUpdate({ userId: loserId }, { $setOnInsert: { userId: loserId } }, { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true });
 
         const turnMultiplier = 1 + Math.min((turnCount * 0.05), 1);
         const rankMultiplier = Math.max(0.1, 1 + ((loser.rankTier - winner.rankTier) * 0.2));

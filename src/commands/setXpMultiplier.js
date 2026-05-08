@@ -6,8 +6,8 @@ const translate = require("../utils/Translate");
 const getLocalization = (keyname) => ({ tr: tr[keyname] });
 
 module.exports = {
-    name: "setxpmultiplier",
-    aliases: ["setxp", "guildxp", "xpkatsayi", "xpayarla"],
+    name: "setxp",
+    aliases: ["setxpmultiplier", "guildxp", "xpkatsayi", "xpayarla"],
     displayName: "CMD_NAME_SETXPMULTIPLIER",
     description: "CMD_DESC_SETXPMULTIPLIER",
     permLevel: 4,
@@ -18,8 +18,8 @@ module.exports = {
         description_localizations: getLocalization("CMD_DESC_SETXPMULTIPLIER"),
         options: [
             {
-                name: "carpan",
-                name_localizations: { en: "multiplier" },
+                name: "multiplier",
+                name_localizations: { tr: "carpan" },
                 description: en.SETXPMULTIPLIER_OPTION_VALUE,
                 description_localizations: getLocalization("SETXPMULTIPLIER_OPTION_VALUE"),
                 type: 10,
@@ -34,7 +34,7 @@ module.exports = {
         const lang = guildData ? guildData.language : "en";
         if (!msgOrInteraction.acknowledge) return;
 
-        const multiplier = msgOrInteraction.data?.options?.find((option) => option.name === "carpan")?.value;
+        const multiplier = msgOrInteraction.data?.options?.find((option) => option.name === "multiplier")?.value;
         const guildId = msgOrInteraction.guildID;
 
         if (typeof multiplier !== "number" || !guildId) {

@@ -353,108 +353,120 @@
   "MOVE_MAHORAGA": "🐺 **MAHORAGA SUMMONED!** **{player}** adapted to everything!",
   "MOVE_HOLLOW_PURPLE": "🟣 **HOLLOW: PURPLE!** Everything in its path was atomized!",
   "MOVE_BREAK_GUARD": "🔴 **TECHNIQUE REVERSAL: RED!** The opponent's guard was shattered!",
-  "MOVE_CLEANSE_DEBUFFS": "💧 **{player}** cleansed all debuffs with Reverse Cursed Technique!"
-  ,"ITEM_FALLBACK": "Item"
-  ,"DUEL_BROKEN_ITEMS": "⚠️ <@{user}>, due to the intensity of the battle, these items broke/depleted: **{items}**"
-  ,"UNKNOWN_ITEM": "Unknown Item"
-  ,"EQUIPPED_BADGE": "Equipped"
-  ,"PAGE_TEXT": "Page {current} / {total}"
-  ,"COIN": "Coin"
-  ,"HP": "HP"
-  ,"SERVER_INFO_ERROR": "Server information could not be retrieved."
-  ,"SI_ID": "ID"
-  ,"SI_TOTAL": "Total"
-  ,"SI_HUMANS": "Humans"
-  ,"SI_BOTS": "Bots"
-  ,"SI_TEXT_CHANNELS": "Text"
-  ,"SI_VOICE_CHANNELS": "Voice"
-  ,"SI_CATEGORY_CHANNELS": "Category"
-  ,"SI_BOOST": "Boost"
-  ,"SI_LEVEL": "Level"
-  ,"SI_BOOST_COUNT": "Boost Count"
-  ,"STATS_LIBRARY": "Library"
-  ,"WARN_USER_LABEL": "User"
-  ,"WARN_TOTAL_LABEL": "Total"
-  ,"WARN_MOD_LABEL": "Mod"
-  ,"WARN_REASON_LABEL": "Reason"
-  ,"DUEL_VS": "VS"
-  ,"DUEL_HP_SHORT": "HP"
-  ,"DUEL_MP_SHORT": "MP"
-  ,"DUEL_PLAYER_ONE": "PLAYER 1"
-  ,"DUEL_PLAYER_TWO": "PLAYER 2"
-  ,"WELCOME_CARD_TITLE": "WELCOME"
-  ,"GOODBYE_CARD_TITLE": "GOODBYE"
-  ,"WELCOME_CARD_COUNT": "We are now {count} members with you!"
-  ,"GOODBYE_CARD_COUNT": "We are now {count} members without you..."
-  ,"STORE_VOTE_CHECK_ERROR": "A system error occurred. Please report this to the developer."
-  ,"LEVEL_DM_PREFIX": "**{guild}** Level:\n{text}"
-  ,"DUEL_RANK_UP": "🎉 **Rank Up!** New rank: **{rank}** 🛡️ *(Shield active!)*"
-  ,"DUEL_SHIELD_BROKEN": "🛡️ 💥 <@{user}> **Your shield has been broken!** Your next defeat will drop your rank."
-  ,"DUEL_RANK_DOWN": "📉 <@{user}> **Rank Down.** New rank: **{rank}**"
-  ,"RANK_UNRANKED": "Unranked"
-  ,"RANK_BAG": "Bag"
-  ,"RANK_PLASTIC": "Plastic"
-  ,"RANK_COPPER": "Copper"
-  ,"RANK_IRON": "Iron"
-  ,"RANK_BRONZE": "Bronze"
-  ,"RANK_SILVER": "Silver"
-  ,"RANK_GOLD": "Gold"
-  ,"RANK_PLATINUM": "Platinum"
-  ,"RANK_DIAMOND": "Diamond"
-  ,"RANK_EMERALD": "Emerald"
-  ,"DROP_TITLE": "🎁 A Mysterious Crate Appeared!"
-  ,"DROP_DESCRIPTION": "Be the first to press the button below to open it. What is inside is a complete surprise..."
-  ,"DROP_OPEN": "Open!"
-  ,"NOT_RECEIVED_DROP_TITLE": "💨 The Drop Vanished!"
-  ,"NOT_RECEIVED_DROP_DESCRIPTION": "No one opened the crate in time, so it disappeared into the wind."
-  ,"NO_DROP": "This drop has expired or is no longer valid."
-  ,"DROP_CLAIMED": "Too late. Someone else already claimed this drop."
-  ,"OPEN_XP_DROP": "🎉 <@{user}> opened the crate and earned **{amount} XP**!"
-  ,"PROMO_DROP_SERVER": "🎉 <@{user}> claimed **{item}** from the drop! The code has been sent via DM."
-  ,"PROMO_DROP_DM": "🎉 **Congratulations!** You just won a **{item}** promo code from the server drop.\nHere is your code: `{code}`"
-  ,"PROMO_DROP_DM_OFF": "🎉 <@{user}> claimed **{item}** from the drop, but I could not deliver the code because DMs are closed. Please open your DMs and contact the staff."
-  ,"PROMO_CODE_FALLBACK": "Promo Code"
-  ,"COIN_DROP": "🎉 <@{user}> opened the crate and earned **{amount} Coin**!"
-  ,"DROP_OPEN_TITLE": "📦 Crate Opened!"
-  ,"CMD_NAME_ADMINDROP": "admindrop"
-  ,"CMD_DESC_ADMINDROP": "Drops a mysterious crate into the current channel."
-  ,"ADMINDROP_OPTION_TYPE": "What should come out of the crate?"
-  ,"ADMINDROP_OPTION_VALUE": "Amount (for example 250) or the promo code itself"
-  ,"ADMINDROP_OPTION_ITEMNAME": "What the promo code is for (promo only)"
-  ,"ADMINDROP_SLASH_ONLY": "Please use this command as a slash (/) command."
-  ,"ADMINDROP_MISSING_FIELDS": "Drop type and value are required."
-  ,"ADMINDROP_INVALID_TYPE": "Invalid drop type selected."
-  ,"ADMINDROP_INVALID_AMOUNT": "For XP or Coin drops, please enter a valid amount greater than 0."
-  ,"ADMINDROP_SUCCESS": "✅ The drop has been sent to the channel successfully."
-  ,"CMD_NAME_DROPSYSTEM": "dropayar"
-  ,"CMD_DESC_DROPSYSTEM": "Enables or disables the automatic mystery crate system for this server."
-  ,"DROPSYSTEM_OPTION_STATUS": "Should drops appear automatically in chat?"
-  ,"DROPSYSTEM_MISSING_STATUS": "Please enter a status. Example: `!dropayar aç` or `!dropayar kapat`."
-  ,"DROPSYSTEM_INVALID_STATUS": "Invalid status. Please use only `aç` or `kapat`."
-  ,"DROPSYSTEM_GUILD_ERROR": "Server information could not be determined for this command."
-  ,"DROPSYSTEM_TITLE": "🎁 Drop System Settings"
-  ,"DROPSYSTEM_UPDATED": "The server's organic drop system has been updated successfully.\n\n**New Status:** {status}"
-  ,"DROPSYSTEM_ENABLED_STATUS": "✅ **Enabled!** Based on chat activity, up to 2 mystery crates can drop per day."
-  ,"DROPSYSTEM_DISABLED_STATUS": "❌ **Disabled.** Organic drops have been stopped. Admins can still use `/admindrop`."
-  ,"DROPSYSTEM_SAVE_ERROR": "A database error occurred while saving the setting."
-  ,"CMD_NAME_SETXPMULTIPLIER": "setxpmultiplier"
-  ,"CMD_DESC_SETXPMULTIPLIER": "Sets the server-specific XP gain multiplier."
-  ,"SETXPMULTIPLIER_OPTION_VALUE": "XP multiplier (for example 1.5 or 2.0)"
-  ,"SETXPMULTIPLIER_INVALID": "A valid XP multiplier could not be read for this server."
-  ,"SETXPMULTIPLIER_TITLE": "📈 XP Multiplier Updated"
-  ,"SETXPMULTIPLIER_UPDATED": "The XP multiplier for this server has been set to **{multiplier}x**.\nUsers will now earn **{multiplier}x** XP."
-  ,"CMD_NAME_SETLEVELROLE": "setlevelrole"
-  ,"CMD_DESC_SETLEVELROLE": "Adds or updates an automatic role reward for a specific level."
-  ,"SETLEVELROLE_OPTION_LEVEL": "The level required to receive the role"
-  ,"SETLEVELROLE_OPTION_ROLE": "The role to grant"
-  ,"SETLEVELROLE_INVALID": "A valid level role configuration could not be read for this server."
-  ,"SETLEVELROLE_TITLE": "🏅 Level Role Updated"
-  ,"SETLEVELROLE_UPDATED": "When a user reaches **Level {level}**, they will automatically receive the <@&{role}> role."
-  ,"CMD_NAME_SETLEVELCHANNEL": "setlevelchannel"
-  ,"CMD_DESC_SETLEVELCHANNEL": "Sets the channel where level-up messages will be sent."
-  ,"SETLEVELCHANNEL_OPTION_CHANNEL": "The text channel where level-up messages should be sent. Leave empty to reset."
-  ,"SETLEVELCHANNEL_INVALID": "A valid server could not be determined for this command."
-  ,"SETLEVELCHANNEL_TITLE": "💬 Level Log Channel"
-  ,"SETLEVELCHANNEL_STATUS_SET": "Level-up messages will now be sent to <#{channel}>."
-  ,"SETLEVELCHANNEL_STATUS_RESET": "The level-up channel has been reset. Congratulations messages will now be sent to users via **DM**."
+  "MOVE_CLEANSE_DEBUFFS": "💧 **{player}** cleansed all debuffs with Reverse Cursed Technique!",
+  "ITEM_FALLBACK": "Item",
+  "DUEL_BROKEN_ITEMS": "⚠️ <@{user}>, due to the intensity of the battle, these items broke/depleted: **{items}**",
+  "UNKNOWN_ITEM": "Unknown Item",
+  "EQUIPPED_BADGE": "Equipped",
+  "PAGE_TEXT": "Page {current} / {total}",
+  "COIN": "Coin",
+  "HP": "HP",
+  "SERVER_INFO_ERROR": "Server information could not be retrieved.",
+  "SI_ID": "ID",
+  "SI_TOTAL": "Total",
+  "SI_HUMANS": "Humans",
+  "SI_BOTS": "Bots",
+  "SI_TEXT_CHANNELS": "Text",
+  "SI_VOICE_CHANNELS": "Voice",
+  "SI_CATEGORY_CHANNELS": "Category",
+  "SI_BOOST": "Boost",
+  "SI_LEVEL": "Level",
+  "SI_BOOST_COUNT": "Boost Count",
+  "STATS_LIBRARY": "Library",
+  "WARN_USER_LABEL": "User",
+  "WARN_TOTAL_LABEL": "Total",
+  "WARN_MOD_LABEL": "Mod",
+  "WARN_REASON_LABEL": "Reason",
+  "DUEL_VS": "VS",
+  "DUEL_HP_SHORT": "HP",
+  "DUEL_MP_SHORT": "MP",
+  "DUEL_PLAYER_ONE": "PLAYER 1",
+  "DUEL_PLAYER_TWO": "PLAYER 2",
+  "WELCOME_CARD_TITLE": "WELCOME",
+  "GOODBYE_CARD_TITLE": "GOODBYE",
+  "WELCOME_CARD_COUNT": "We are now {count} members with you!",
+  "GOODBYE_CARD_COUNT": "We are now {count} members without you...",
+  "STORE_VOTE_CHECK_ERROR": "A system error occurred. Please report this to the developer.",
+  "LEVEL_DM_PREFIX": "**{guild}** Level:\n{text}",
+  "DUEL_RANK_UP": "🎉 **Rank Up!** New rank: **{rank}** 🛡️ *(Shield active!)*",
+  "DUEL_SHIELD_BROKEN": "🛡️ 💥 <@{user}> **Your shield has been broken!** Your next defeat will drop your rank.",
+  "DUEL_RANK_DOWN": "📉 <@{user}> **Rank Down.** New rank: **{rank}**",
+  "RANK_UNRANKED": "Unranked",
+  "RANK_BAG": "Bag",
+  "RANK_PLASTIC": "Plastic",
+  "RANK_COPPER": "Copper",
+  "RANK_IRON": "Iron",
+  "RANK_BRONZE": "Bronze",
+  "RANK_SILVER": "Silver",
+  "RANK_GOLD": "Gold",
+  "RANK_PLATINUM": "Platinum",
+  "RANK_DIAMOND": "Diamond",
+  "RANK_EMERALD": "Emerald",
+  "DROP_TITLE": "🎁 A Mysterious Crate Appeared!",
+  "DROP_DESCRIPTION": "Be the first to press the button below to open it. What is inside is a complete surprise...",
+  "DROP_OPEN": "Open!",
+  "NOT_RECEIVED_DROP_TITLE": "💨 The Drop Vanished!",
+  "NOT_RECEIVED_DROP_DESCRIPTION": "No one opened the crate in time, so it disappeared into the wind.",
+  "NO_DROP": "This drop has expired or is no longer valid.",
+  "DROP_CLAIMED": "Too late. Someone else already claimed this drop.",
+  "OPEN_XP_DROP": "🎉 <@{user}> opened the crate and earned **{amount} XP**!",
+  "PROMO_DROP_SERVER": "🎉 <@{user}> claimed **{item}** from the drop! The code has been sent via DM.",
+  "PROMO_DROP_DM": "🎉 **Congratulations!** You just won a **{item}** promo code from the server drop.\nHere is your code: `{code}`",
+  "PROMO_DROP_DM_OFF": "🎉 <@{user}> claimed **{item}** from the drop, but I could not deliver the code because DMs are closed. Please open your DMs and contact the staff.",
+  "PROMO_CODE_FALLBACK": "Promo Code",
+  "COIN_DROP": "🎉 <@{user}> opened the crate and earned **{amount} Coin**!",
+  "DROP_OPEN_TITLE": "📦 Crate Opened!",
+  "CMD_NAME_ADMINDROP": "admindrop",
+  "CMD_DESC_ADMINDROP": "Drops a mysterious crate into the current channel.",
+  "ADMINDROP_OPTION_TYPE": "What should come out of the crate?",
+  "ADMINDROP_OPTION_VALUE": "Amount (for example 250) or the promo code itself",
+  "ADMINDROP_OPTION_ITEMNAME": "What the promo code is for (promo only)",
+  "ADMINDROP_SLASH_ONLY": "Please use this command as a slash (/) command.",
+  "ADMINDROP_MISSING_FIELDS": "Drop type and value are required.",
+  "ADMINDROP_INVALID_TYPE": "Invalid drop type selected.",
+  "ADMINDROP_INVALID_AMOUNT": "For XP or Coin drops, please enter a valid amount greater than 0.",
+  "ADMINDROP_SUCCESS": "✅ The drop has been sent to the channel successfully.",
+  "CMD_NAME_DROPSYSTEM": "dropayar",
+  "CMD_DESC_DROPSYSTEM": "Enables or disables the automatic mystery crate system for this server.",
+  "DROPSYSTEM_OPTION_STATUS": "Should drops appear automatically in chat?",
+  "DROPSYSTEM_MISSING_STATUS": "Please enter a status. Example: `!dropayar aç` or `!dropayar kapat`.",
+  "DROPSYSTEM_INVALID_STATUS": "Invalid status. Please use only `aç` or `kapat`.",
+  "DROPSYSTEM_GUILD_ERROR": "Server information could not be determined for this command.",
+  "DROPSYSTEM_TITLE": "🎁 Drop System Settings",
+  "DROPSYSTEM_UPDATED": "The server's organic drop system has been updated successfully.\n\n**New Status:** {status}",
+  "DROPSYSTEM_ENABLED_STATUS": "✅ **Enabled!** Based on chat activity, up to 2 mystery crates can drop per day.",
+  "DROPSYSTEM_DISABLED_STATUS": "❌ **Disabled.** Organic drops have been stopped. Admins can still use `/admindrop`.",
+  "DROPSYSTEM_SAVE_ERROR": "A database error occurred while saving the setting.",
+  "CMD_NAME_SETXPMULTIPLIER": "setxpmultiplier",
+  "CMD_DESC_SETXPMULTIPLIER": "Sets the server-specific XP gain multiplier.",
+  "SETXPMULTIPLIER_OPTION_VALUE": "XP multiplier (for example 1.5 or 2.0)",
+  "SETXPMULTIPLIER_INVALID": "A valid XP multiplier could not be read for this server.",
+  "SETXPMULTIPLIER_TITLE": "📈 XP Multiplier Updated",
+  "SETXPMULTIPLIER_UPDATED": "The XP multiplier for this server has been set to **{multiplier}x**.\nUsers will now earn **{multiplier}x** XP.",
+  "CMD_NAME_SETLEVELROLE": "setlevelrole",
+  "CMD_DESC_SETLEVELROLE": "Adds or updates an automatic role reward for a specific level.",
+  "SETLEVELROLE_OPTION_LEVEL": "The level required to receive the role",
+  "SETLEVELROLE_OPTION_ROLE": "The role to grant",
+  "SETLEVELROLE_INVALID": "A valid level role configuration could not be read for this server.",
+  "SETLEVELROLE_TITLE": "🏅 Level Role Updated",
+  "SETLEVELROLE_UPDATED": "When a user reaches **Level {level}**, they will automatically receive the <@&{role}> role.",
+  "CMD_NAME_SETLEVELCHANNEL": "setlevelchannel",
+  "CMD_DESC_SETLEVELCHANNEL": "Sets the channel where level-up messages will be sent.",
+  "SETLEVELCHANNEL_OPTION_CHANNEL": "The text channel where level-up messages should be sent. Leave empty to reset.",
+  "SETLEVELCHANNEL_INVALID": "A valid server could not be determined for this command.",
+  "SETLEVELCHANNEL_TITLE": "💬 Level Log Channel",
+  "SETLEVELCHANNEL_STATUS_SET": "Level-up messages will now be sent to <#{channel}>.",
+  "SETLEVELCHANNEL_STATUS_RESET": "The level-up channel has been reset. Congratulations messages will now be sent to users via **DM**.",
+  "LEADERBOARD_PLACEHOLDER": "Select a leaderboard category",
+  "LEADERBOARD_SERVER_LEVEL": "🏆 Server Level Leaderboard",
+  "LEADERBOARD_SERVER_RANK": "⚔️ Server Rank Leaderboard",
+  "LEADERBOARD_GLOBAL_RANK": "🌍 Global Rank Leaderboard",
+  "LEADERBOARD_LEVEL_LABEL": "Level",
+  "LEADERBOARD_XP_LABEL": "XP",
+  "LEADERBOARD_RANK_LABEL": "Rank",
+  "LEADERBOARD_KP_LABEL": "KP",
+  "LEADERBOARD_WIN_LABEL": "Wins",
+  "LEADERBOARD_HIDDEN_USER": "Hidden User ({user})",
+  "LEADERBOARD_UNKNOWN_USER": "Unknown User ({user})",
+  "LEADERBOARD_WL_LABEL": "W/L"
 }

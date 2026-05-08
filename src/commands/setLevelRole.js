@@ -18,8 +18,8 @@ module.exports = {
         description_localizations: getLocalization("CMD_DESC_SETLEVELROLE"),
         options: [
             {
-                name: "seviye",
-                name_localizations: { en: "level" },
+                name: "level",
+                name_localizations: { tr: "seviye" },
                 description: en.SETLEVELROLE_OPTION_LEVEL,
                 description_localizations: getLocalization("SETLEVELROLE_OPTION_LEVEL"),
                 type: 4,
@@ -27,8 +27,8 @@ module.exports = {
                 min_value: 1
             },
             {
-                name: "rol",
-                name_localizations: { en: "role" },
+                name: "role",
+                name_localizations: { tr: "rol" },
                 description: en.SETLEVELROLE_OPTION_ROLE,
                 description_localizations: getLocalization("SETLEVELROLE_OPTION_ROLE"),
                 type: 8,
@@ -41,8 +41,8 @@ module.exports = {
         const lang = guildData ? guildData.language : "en";
         if (!msgOrInteraction.acknowledge) return;
 
-        const level = msgOrInteraction.data?.options?.find((option) => option.name === "seviye")?.value;
-        const roleId = msgOrInteraction.data?.options?.find((option) => option.name === "rol")?.value;
+        const level = msgOrInteraction.data?.options?.find((option) => option.name === "level")?.value;
+        const roleId = msgOrInteraction.data?.options?.find((option) => option.name === "role")?.value;
         const guildId = msgOrInteraction.guildID;
 
         if (!level || !roleId || !guildId) {
@@ -57,7 +57,7 @@ module.exports = {
         const guildDataDoc = await Guild.findOneAndUpdate(
             { guildId },
             { $setOnInsert: { guildId } },
-            { upsert: true, new: true, setDefaultsOnInsert: true }
+            { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
         );
 
         guildDataDoc.levelRoles.set(String(level), roleId);

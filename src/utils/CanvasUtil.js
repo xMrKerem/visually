@@ -167,9 +167,15 @@ module.exports = {
         return canvas.encode("jpeg", 90);
     },
 
-    drawProfile: async (user, userData, nextLevelXp, texts) => {
+    drawProfile: async (user, userData, serverLevelData, nextLevelXp, texts) => {
         const canvas = createCanvas(800, 300);
         const ctx = canvas.getContext("2d");
+
+        const level = serverLevelData ? serverLevelData.level : 1;
+        const xp = serverLevelData ? serverLevelData.xp : 0;
+        const balance = userData ? userData.balance : 0;
+        const wins = userData ? userData.wins : 0;
+        const losses = userData ? userData.losses : 0;
 
         ctx.antialias = "subpixel";
         ctx.patternQuality = "best";
@@ -195,16 +201,17 @@ module.exports = {
 
         ctx.fillStyle = "#f1c40f";
         ctx.font = "bold 24px Arial";
-        ctx.fillText(`${texts.level || "Level"} ${userData.level}`, 280, 125);
+        ctx.fillText(`${texts.level || "Level"} ${level}`, 280, 125);
 
         const barY = 150;
-        const xpPercent = Math.min((userData.xp / Math.max(nextLevelXp, 1)), 1);
+        const safeNextXp = Math.max(nextLevelXp || 100, 1);
+        const xpPercent = Math.min((xp / safeNextXp), 1);
         drawProgressBar(ctx, 280, barY, 460, 26, xpPercent, "#2ecc71", "#444");
 
         ctx.fillStyle = "#fff";
         ctx.font = "bold 16px Arial";
         ctx.textAlign = "center";
-        ctx.fillText(`${userData.xp} / ${nextLevelXp} XP`, 510, barY + 18);
+        ctx.fillText(`${xp} / ${safeNextXp} XP`, 510, barY + 18);
 
         const statY = 240;
         ctx.textAlign = "left";
@@ -215,21 +222,21 @@ module.exports = {
         ctx.arc(290, statY - 6, 8, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = "#dfe6e9";
-        ctx.fillText(`${texts.wallet || "Wallet"}: ${userData.balance}`, 310, statY);
+        ctx.fillText(`${texts.wallet || "Wallet"}: ${balance}`, 310, statY);
 
         ctx.fillStyle = "#00b894";
         ctx.beginPath();
         ctx.arc(490, statY - 6, 8, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = "#dfe6e9";
-        ctx.fillText(`${texts.wins || "Wins"}: ${userData.wins}`, 510, statY);
+        ctx.fillText(`${texts.wins || "Wins"}: ${wins}`, 510, statY);
 
         ctx.fillStyle = "#d63031";
         ctx.beginPath();
         ctx.arc(650, statY - 6, 8, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = "#dfe6e9";
-        ctx.fillText(`${texts.losses || "Loss"}: ${userData.losses}`, 670, statY);
+        ctx.fillText(`${texts.losses || "Loss"}: ${losses}`, 670, statY);
 
         return canvas.encode("jpeg", 90);
     },

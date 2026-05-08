@@ -1,4 +1,5 @@
 const User = require("../database/models/User");
+const ServerLevel = require("../database/models/ServerLevel");
 const CanvasUtil = require("../utils/CanvasUtil");
 const LevelSystem = require("../utils/LevelSystem");
 const translate = require("../utils/Translate");
@@ -45,6 +46,7 @@ module.exports = {
 
     execute: async (bot, msgOrInteraction, args, guildData) => {
         const lang = guildData ? guildData.language : "en";
+        const guildId = msgOrInteraction.guildID;
 
         let targetUser;
 
@@ -67,6 +69,12 @@ module.exports = {
             await userData.save();
         }
 
+        let serverLevelData = { level: 1, xp: 0 };
+        if (guildId) {
+            let sld = await ServerLevel.findOne({ userId: targetUser.id, guildId: guildId });
+            if (sld) serverLevelData = sld;
+        }
+
         const reply = async (payload, file) => {
             try {
                 if (msgOrInteraction.createFollowup) {
@@ -80,10 +88,10 @@ module.exports = {
         };
 
         if (msgOrInteraction.acknowledge && !msgOrInteraction.acknowledged) {
-            await msgOrInteraction.defer();
+            await msgOrInteraction.acknowledge();
         }
 
-        const nextLevelXp = LevelSystem.calculateNextLevelXP(userData.level);
+        const nextLevelXp = LevelSystem.calculateNextLevelXP(serverLevelData.level);
 
         const canvasTexts = {
             level: translate("LEVEL", lang),
@@ -92,7 +100,7 @@ module.exports = {
             losses: translate("LOSSES", lang)
         };
 
-        const buffer = await CanvasUtil.drawProfile(targetUser, userData, nextLevelXp, canvasTexts);
+        const buffer = await CanvasUtil.drawProfile(targetUser, userData, serverLevelData, nextLevelXp, canvasTexts);
 
         return reply(
             { content: translate("PROFILE_HEADER", lang, { user: targetUser.username }) },
