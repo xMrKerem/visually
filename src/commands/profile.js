@@ -104,7 +104,7 @@ module.exports = {
 
         return reply(
             { content: translate("PROFILE_HEADER", lang, { user: targetUser.username }) },
-            { file: buffer, name: "profile.jpg" }
+            { file: buffer, name: "profile.png" }
         );
     }
 };

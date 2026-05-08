@@ -250,9 +250,9 @@ module.exports = {
 
                 return {
                     content: contentText,
-                    file: { file: buffer, name: "duel.jpg" },
+                    file: { file: buffer, name: "duel.png" },
                     embed: {
-                        image: { url: "attachment://duel.jpg" },
+                        image: { url: "attachment://duel.png" },
                         color: 0x2f3136,
                     },
                     components: buttons

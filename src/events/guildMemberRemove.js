@@ -24,7 +24,7 @@ module.exports = {
 
                 await bot.createMessage(guildData.goodbyeChannel, {
                     content: translate("GOODBYE_MSG", lang, { user: userObj.username }),
-                }, { file: buffer, name: "goodbye.jpg" });
+                }, { file: buffer, name: "goodbye.png" });
 
             } catch (e) {
                 console.error(`[Goodbye] Hata: Mesaj gönderilemedi.`, e);

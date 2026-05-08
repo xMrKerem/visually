@@ -16,6 +16,7 @@ const BADGE_ICONS = [
 ];
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const scale = 4
 
 const drawRoundedRect = (ctx, x, y, width, height, radius) => {
     const safeRadius = Math.min(radius, width / 2, height / 2);
@@ -148,8 +149,9 @@ const drawCircularProgress = (ctx, cx, cy, radius, thickness, ratio, fgColor, bg
 
 module.exports = {
     drawDuel: async (p1, p2, texts = {}) => {
-        const canvas = createCanvas(800, 400);
+        const canvas = createCanvas(800 * scale, 400 * scale);
         const ctx = canvas.getContext("2d");
+        ctx.scale(scale, scale);
         const duelTexts = {
             vs: texts.vs || "VS",
             hp: texts.hp || "HP",
@@ -162,6 +164,8 @@ module.exports = {
         ctx.patternQuality = "best";
         ctx.quality = "best";
         ctx.textDrawingMode = "path";
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
 
         const gradient = ctx.createLinearGradient(0, 0, 800, 400);
         gradient.addColorStop(0, "#0f0c29");
@@ -220,12 +224,14 @@ module.exports = {
         fitText(ctx, name2, 260, 24);
         ctx.fillText(truncateText(ctx, name2, 260), 640, 58);
 
-        return canvas.encode("jpeg", 90);
+        return canvas.encode("png");
     },
 
     drawProfile: async (user, userData, serverLevelData, nextLevelXp, texts) => {
-        const canvas = createCanvas(850, 360);
+        const canvas = createCanvas(850 * scale, 360 * scale);
         const ctx = canvas.getContext("2d");
+
+        ctx.scale(scale, scale);
 
         const level = serverLevelData ? serverLevelData.level : 1;
         const xp = serverLevelData ? serverLevelData.xp : 0;
@@ -234,9 +240,14 @@ module.exports = {
         const losses = userData ? userData.losses : 0;
         const kp = userData ? userData.kp : 0;
         const rankTier = userData ? userData.rankTier : 0;
+        const circleY = 200;
+        const radius = 55;
+        const thick = 12;
 
         ctx.antialias = "subpixel";
         ctx.patternQuality = "best";
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
 
         const gradient = ctx.createLinearGradient(0, 0, 850, 360);
         gradient.addColorStop(0, "#141E30");
@@ -255,7 +266,7 @@ module.exports = {
         fitText(ctx, user.username, 400, 38);
 
         const displayedName = truncateText(ctx, user.username, 400);
-        ctx.fillText(displayedName, 330, 110);
+        ctx.fillText(displayedName, 400 - radius, 110);
 
         const nameWidth = ctx.measureText(displayedName).width;
 
@@ -264,14 +275,10 @@ module.exports = {
             if (badgeUrl) {
                 const badgeImg = await loadImage(badgeUrl);
                 if (badgeImg) {
-                    ctx.drawImage(badgeImg, 330 + nameWidth + 15, 78, 40, 40);
+                    ctx.drawImage(badgeImg, 400 - radius + nameWidth + 15, 78, 40, 40);
                 }
             }
         } catch (e) {}
-
-        const circleY = 200;
-        const radius = 55;
-        const thick = 12;
 
         const safeNextXp = Math.max(nextLevelXp || 100, 1);
         const xpRatio = xp / safeNextXp;
@@ -283,19 +290,22 @@ module.exports = {
 
         const totalMatches = wins + losses;
         const winRatio = totalMatches > 0 ? (wins / totalMatches) : 0;
-        drawCircularProgress(ctx, 720, circleY, radius, thick, winRatio, "#f1c40f", "#e74c3c", texts.winLoss, `${wins} / ${losses}`);
+        const wlBgColor = totalMatches === 0 ? "rgba(0,0,0,0.4)" : "#e74c3c";
+        const wlFgColor = "#2ecc71";
+        drawCircularProgress(ctx, 720, circleY, radius, thick, winRatio, wlFgColor, wlBgColor, texts.winLoss, `${wins} / ${losses}`);
 
         ctx.fillStyle = "#f1c40f";
-        ctx.textAlign = "center";
+        ctx.textAlign = "left";
         ctx.font = "bold 20px Arial";
-        ctx.fillText(`${texts.wallet}: ${balance}`, 420, 320);
+        ctx.fillText(`${texts.wallet}: ${balance}`, 400 - radius, 320);
 
-        return canvas.encode("jpeg", 90);
+        return canvas.encode("png");
     },
 
     drawWelcome: async (member, type, memberCount, texts = {}) => {
-        const canvas = createCanvas(800, 360);
+        const canvas = createCanvas(800 * scale, 360 * scale);
         const ctx = canvas.getContext("2d");
+        ctx.scale(scale, scale);
         const welcomeTexts = {
             welcomeTitle: texts.welcomeTitle || "WELCOME",
             goodbyeTitle: texts.goodbyeTitle || "GOODBYE",
@@ -306,6 +316,8 @@ module.exports = {
         ctx.antialias = "subpixel";
         ctx.patternQuality = "best";
         ctx.quality = "best";
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
 
         const gradient = ctx.createLinearGradient(0, 0, 800, 360);
         if (type === "welcome") {
@@ -346,6 +358,6 @@ module.exports = {
             .replace("{count}", memberCount);
         ctx.fillText(countText, 400, 340);
 
-        return canvas.encode("jpeg", 90);
+        return canvas.encode("png");
     }
 };

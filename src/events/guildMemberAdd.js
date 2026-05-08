@@ -30,7 +30,7 @@ module.exports = {
 
                 await bot.createMessage(guildData.welcomeChannel, {
                     content: translate("WELCOME_MSG", lang, { user: `<@${member.id}>` }),
-                }, { file: buffer, name: "welcome.jpg" });
+                }, { file: buffer, name: "welcome.png" });
 
             } catch (e) {
                 console.error(`[Welcome] Hata: Mesaj gönderilemedi.`, e);
