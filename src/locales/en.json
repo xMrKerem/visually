@@ -468,5 +468,9 @@
   "LEADERBOARD_WIN_LABEL": "Wins",
   "LEADERBOARD_HIDDEN_USER": "Hidden User ({user})",
   "LEADERBOARD_UNKNOWN_USER": "Unknown User ({user})",
-  "LEADERBOARD_WL_LABEL": "W/L"
+  "LEADERBOARD_WL_LABEL": "W/L",
+  "PROFILE_LEVEL": "Level",
+  "PROFILE_RANK_POINTS": "Rank\nPoints",
+  "PROFILE_WIN_LOSS": "W / L",
+  "PROFILE_WALLET": "Wallet"
 }

@@ -27,6 +27,15 @@ module.exports = {
     },
 
     handleLevelXP: async (bot, message, guildData) => {
+
+        if (message.author.bot || !message.guild) return;
+
+        const prefixies = [
+            ".", "!", "-", "?"
+        ]
+
+        if (prefixies.some(prefix => message.content.startsWith(prefix))) return;
+
         const guildId = message.guildID;
         const userId = message.author.id;
         const messageLength = message.content.length;

@@ -1,6 +1,19 @@
 const { createCanvas, loadImage } = require("@napi-rs/canvas");
-
 const DEFAULT_AVATAR = "https://cdn.discordapp.com/embed/avatars/0.png";
+
+const BADGE_ICONS = [
+    null,
+    "https://api.iconify.design/game-icons/paper-bag-open.svg?color=%2395a5a6&width=128&height=128",
+    "https://api.iconify.design/game-icons/plastic-duck.svg?color=%23bdc3c7&width=128&height=128",
+    "https://api.iconify.design/game-icons/two-coins.svg?color=%23b87333&width=128&height=128",
+    "https://api.iconify.design/game-icons/anvil.svg?color=%237f8c8d&width=128&height=128",
+    "https://api.iconify.design/game-icons/star-medal.svg?color=%23cd7f32&width=128&height=128",
+    "https://api.iconify.design/game-icons/silver-bullet.svg?color=%23c0c0c0&width=128&height=128",
+    "https://api.iconify.design/game-icons/gold-bar.svg?color=%23ffd700&width=128&height=128",
+    "https://api.iconify.design/game-icons/crystal-bars.svg?color=%23e5e4e2&width=128&height=128",
+    "https://api.iconify.design/game-icons/cut-diamond.svg?color=%2300ffff&width=128&height=128",
+    "https://api.iconify.design/game-icons/emerald.svg?color=%232ecc71&width=128&height=128"
+];
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
@@ -21,7 +34,8 @@ const drawRoundedRect = (ctx, x, y, width, height, radius) => {
 
 const loadSafeImage = async (url) => {
     try {
-        return await loadImage(url || DEFAULT_AVATAR);
+        if (!url) return null;
+        return await loadImage(url);
     } catch (error) {
         return await loadImage(DEFAULT_AVATAR);
     }
@@ -39,7 +53,7 @@ const drawCoverImage = (ctx, image, x, y, width, height) => {
 };
 
 const drawCircularAvatar = async (ctx, avatarUrl, cx, cy, radius, borderColor, borderWidth = 6) => {
-    const avatar = await loadSafeImage(avatarUrl);
+    const avatar = await loadSafeImage(avatarUrl) || await loadImage(DEFAULT_AVATAR);
 
     ctx.save();
     ctx.beginPath();
@@ -88,6 +102,48 @@ const drawProgressBar = (ctx, x, y, width, height, ratio, fillColor, backgroundC
     ctx.fillStyle = fillColor;
     drawRoundedRect(ctx, x, y, Math.max(height, width * safeRatio), height, height / 2);
     ctx.fill();
+};
+
+const drawCircularProgress = (ctx, cx, cy, radius, thickness, ratio, fgColor, bgColor, topText, bottomText) => {
+    const safeRatio = clamp(ratio || 0, 0, 1);
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.lineWidth = thickness;
+    ctx.strokeStyle = bgColor;
+    ctx.stroke();
+
+    if (safeRatio > 0) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * safeRatio));
+        ctx.lineWidth = thickness;
+        ctx.strokeStyle = fgColor;
+        ctx.lineCap = "round";
+        ctx.stroke();
+    }
+
+    if (topText) {
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "bold 16px Arial";
+
+        const lines = topText.split('\n');
+        if (lines.length === 1) {
+            ctx.fillText(lines[0], cx, cy - 10);
+        } else {
+            ctx.fillText(lines[0], cx, cy - 18);
+            ctx.fillText(lines[1], cx, cy - 2);
+        }
+    }
+
+    if (bottomText) {
+        ctx.fillStyle = "#dfe6e9";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "14px Arial";
+        ctx.fillText(bottomText, cx, cy + 14);
+    }
 };
 
 module.exports = {
@@ -168,7 +224,7 @@ module.exports = {
     },
 
     drawProfile: async (user, userData, serverLevelData, nextLevelXp, texts) => {
-        const canvas = createCanvas(800, 300);
+        const canvas = createCanvas(850, 360);
         const ctx = canvas.getContext("2d");
 
         const level = serverLevelData ? serverLevelData.level : 1;
@@ -176,67 +232,63 @@ module.exports = {
         const balance = userData ? userData.balance : 0;
         const wins = userData ? userData.wins : 0;
         const losses = userData ? userData.losses : 0;
+        const kp = userData ? userData.kp : 0;
+        const rankTier = userData ? userData.rankTier : 0;
 
         ctx.antialias = "subpixel";
         ctx.patternQuality = "best";
-        ctx.quality = "best";
 
-        const gradient = ctx.createLinearGradient(0, 0, 800, 300);
+        const gradient = ctx.createLinearGradient(0, 0, 850, 360);
         gradient.addColorStop(0, "#141E30");
         gradient.addColorStop(1, "#243B55");
         ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, 800, 300);
+        ctx.fillRect(0, 0, 850, 360);
 
-        ctx.fillStyle = "rgba(255,255,255,0.04)";
-        ctx.beginPath();
-        ctx.arc(760, 30, 180, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,0.03)";
+        ctx.beginPath(); ctx.arc(800, 40, 200, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(50, 320, 100, 0, Math.PI * 2); ctx.fill();
 
-        await drawCircularAvatar(ctx, user.dynamicAvatarURL("png", 256), 150, 150, 90, "#f1c40f", 8);
+        await drawCircularAvatar(ctx, user.dynamicAvatarURL("png", 256), 170, 180, 110, "#f1c40f", 8);
 
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "left";
-        fitText(ctx, user.username, 470, 36);
-        ctx.fillText(truncateText(ctx, user.username, 470), 280, 90);
+        fitText(ctx, user.username, 400, 38);
 
-        ctx.fillStyle = "#f1c40f";
-        ctx.font = "bold 24px Arial";
-        ctx.fillText(`${texts.level || "Level"} ${level}`, 280, 125);
+        const displayedName = truncateText(ctx, user.username, 400);
+        ctx.fillText(displayedName, 330, 110);
 
-        const barY = 150;
+        const nameWidth = ctx.measureText(displayedName).width;
+
+        try {
+            const badgeUrl = BADGE_ICONS[rankTier];
+            if (badgeUrl) {
+                const badgeImg = await loadImage(badgeUrl);
+                if (badgeImg) {
+                    ctx.drawImage(badgeImg, 330 + nameWidth + 15, 78, 40, 40);
+                }
+            }
+        } catch (e) {}
+
+        const circleY = 200;
+        const radius = 55;
+        const thick = 12;
+
         const safeNextXp = Math.max(nextLevelXp || 100, 1);
-        const xpPercent = Math.min((xp / safeNextXp), 1);
-        drawProgressBar(ctx, 280, barY, 460, 26, xpPercent, "#2ecc71", "#444");
+        const xpRatio = xp / safeNextXp;
+        drawCircularProgress(ctx, 400, circleY, radius, thick, xpRatio, "#3498db", "rgba(0,0,0,0.4)", `${texts.level} ${level}`, `${xp} / ${safeNextXp}`);
 
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 16px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(`${xp} / ${safeNextXp} XP`, 510, barY + 18);
+        const kpRatio = kp / 100;
+        drawCircularProgress(ctx, 560, circleY, radius, thick, kpRatio, "#f1c40f", "rgba(0,0,0,0.4)", texts.rankPoints, `${kp} / 100`);
 
-        const statY = 240;
-        ctx.textAlign = "left";
-        ctx.font = "20px Arial";
+
+        const totalMatches = wins + losses;
+        const winRatio = totalMatches > 0 ? (wins / totalMatches) : 0;
+        drawCircularProgress(ctx, 720, circleY, radius, thick, winRatio, "#f1c40f", "#e74c3c", texts.winLoss, `${wins} / ${losses}`);
 
         ctx.fillStyle = "#f1c40f";
-        ctx.beginPath();
-        ctx.arc(290, statY - 6, 8, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#dfe6e9";
-        ctx.fillText(`${texts.wallet || "Wallet"}: ${balance}`, 310, statY);
-
-        ctx.fillStyle = "#00b894";
-        ctx.beginPath();
-        ctx.arc(490, statY - 6, 8, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#dfe6e9";
-        ctx.fillText(`${texts.wins || "Wins"}: ${wins}`, 510, statY);
-
-        ctx.fillStyle = "#d63031";
-        ctx.beginPath();
-        ctx.arc(650, statY - 6, 8, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#dfe6e9";
-        ctx.fillText(`${texts.losses || "Loss"}: ${losses}`, 670, statY);
+        ctx.textAlign = "center";
+        ctx.font = "bold 20px Arial";
+        ctx.fillText(`${texts.wallet}: ${balance}`, 420, 320);
 
         return canvas.encode("jpeg", 90);
     },

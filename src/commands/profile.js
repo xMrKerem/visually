@@ -94,10 +94,10 @@ module.exports = {
         const nextLevelXp = LevelSystem.calculateNextLevelXP(serverLevelData.level);
 
         const canvasTexts = {
-            level: translate("LEVEL", lang),
-            wallet: translate("WALLET", lang),
-            wins: translate("WINS", lang),
-            losses: translate("LOSSES", lang)
+            level: translate("PROFILE_LEVEL", lang),
+            rankPoints: translate("PROFILE_RANK_POINTS", lang),
+            winLoss: translate("PROFILE_WIN_LOSS", lang),
+            wallet: translate("PROFILE_WALLET", lang)
         };
 
         const buffer = await CanvasUtil.drawProfile(targetUser, userData, serverLevelData, nextLevelXp, canvasTexts);

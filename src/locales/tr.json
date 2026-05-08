@@ -467,5 +467,9 @@
   "LEADERBOARD_WIN_LABEL": "Galibiyet",
   "LEADERBOARD_HIDDEN_USER": "Gizli Kullanıcı ({user})",
   "LEADERBOARD_UNKNOWN_USER": "Bilinmeyen Kullanıcı ({user})",
-  "LEADERBOARD_WL_LABEL": "G/M"
+  "LEADERBOARD_WL_LABEL": "G/M",
+  "PROFILE_LEVEL": "Seviye",
+  "PROFILE_RANK_POINTS": "Kademe\nPuanı",
+  "PROFILE_WIN_LOSS": "W / L",
+  "PROFILE_WALLET": "Cüzdan"
 }

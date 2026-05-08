@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
 
     rankTier: {
         type: Number,
-        default: 1
+        default: 0
     },
 
     shield: {
