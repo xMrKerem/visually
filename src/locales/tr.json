@@ -353,87 +353,107 @@
   "MOVE_MAHORAGA": "🐺 **MAHORAGA ÇAĞRILDI!** **{player}** her şeye uyum sağladı!",
   "MOVE_HOLLOW_PURPLE": "🟣 **BOŞLUK: MOR!** Yolundaki her şey atomlarına ayrıldı!",
   "MOVE_BREAK_GUARD": "🔴 **TERSİNE ÇEVİRME: KIRMIZI!** Rakibin gardı darmadağın oldu!",
-  "MOVE_CLEANSE_DEBUFFS": "💧 **{player}** Ters Lanetli Teknik ile tüm zayıflatmalardan arındı!"
-  ,"ITEM_FALLBACK": "Eşya"
-  ,"DUEL_BROKEN_ITEMS": "⚠️ <@{user}>, savaşın şiddetinden dolayı şu eşyaların kırıldı/tükendi: **{items}**"
-  ,"UNKNOWN_ITEM": "Bilinmeyen Eşya"
-  ,"EQUIPPED_BADGE": "Takılı"
-  ,"PAGE_TEXT": "Sayfa {current} / {total}"
-  ,"COIN": "Coin"
-  ,"HP": "Can"
-  ,"SERVER_INFO_ERROR": "Sunucu bilgisi alınamadı."
-  ,"SI_ID": "ID"
-  ,"SI_TOTAL": "Toplam"
-  ,"SI_HUMANS": "İnsan"
-  ,"SI_BOTS": "Bot"
-  ,"SI_TEXT_CHANNELS": "Yazı"
-  ,"SI_VOICE_CHANNELS": "Ses"
-  ,"SI_CATEGORY_CHANNELS": "Kategori"
-  ,"SI_BOOST": "Boost"
-  ,"SI_LEVEL": "Seviye"
-  ,"SI_BOOST_COUNT": "Boost Sayısı"
-  ,"STATS_LIBRARY": "Kütüphane"
-  ,"WARN_USER_LABEL": "Kullanıcı"
-  ,"WARN_TOTAL_LABEL": "Toplam"
-  ,"WARN_MOD_LABEL": "Mod"
-  ,"WARN_REASON_LABEL": "Sebep"
-  ,"DUEL_VS": "VS"
-  ,"DUEL_HP_SHORT": "Can"
-  ,"DUEL_MP_SHORT": "MP"
-  ,"DUEL_PLAYER_ONE": "OYUNCU 1"
-  ,"DUEL_PLAYER_TWO": "OYUNCU 2"
-  ,"WELCOME_CARD_TITLE": "HOŞGELDİN"
-  ,"GOODBYE_CARD_TITLE": "GÜLE GÜLE"
-  ,"WELCOME_CARD_COUNT": "Seninle birlikte {count} kişi olduk!"
-  ,"GOODBYE_CARD_COUNT": "Sensiz {count} kişi kaldık..."
-  ,"STORE_VOTE_CHECK_ERROR": "Sistemsel bir hata oluştu. Lütfen yapımcıya bildir."
-  ,"LEVEL_DM_PREFIX": "**{guild}** Sunucusundaki Seviyen:\n{text}"
-  ,"DUEL_RANK_UP": "🎉 **Rütbe atladın!** Yeni rütben: **{rank}** 🛡️ *(Kalkan aktif!)*"
-  ,"DUEL_SHIELD_BROKEN": "🛡️ 💥 <@{user}> **Kalkanın kırıldı!** Bir sonraki mağlubiyetinde rütben düşecek."
-  ,"DUEL_RANK_DOWN": "📉 <@{user}> **Rütben düştü.** Yeni rütben: **{rank}**"
-  ,"RANK_UNRANKED": "Rütbesiz"
-  ,"RANK_BAG": "Poşet"
-  ,"RANK_PLASTIC": "Plastik"
-  ,"RANK_COPPER": "Bakır"
-  ,"RANK_IRON": "Demir"
-  ,"RANK_BRONZE": "Bronz"
-  ,"RANK_SILVER": "Gümüş"
-  ,"RANK_GOLD": "Altın"
-  ,"RANK_PLATINUM": "Platin"
-  ,"RANK_DIAMOND": "Elmas"
-  ,"RANK_EMERALD": "Zümrüt"
-  ,"DROP_TITLE": "🎁 Gizemli Bir Kutu Düştü!"
-  ,"DROP_DESCRIPTION": "Kutuyu açmak için aşağıdaki butona ilk sen bas. İçinden ne çıkacağı tamamen sürpriz..."
-  ,"DROP_OPEN": "Aç!"
-  ,"NOT_RECEIVED_DROP_TITLE": "💨 Drop Kayboldu!"
-  ,"NOT_RECEIVED_DROP_DESCRIPTION": "Kimse kutuyu zamanında açmadığı için rüzgara karışıp yok oldu."
-  ,"NO_DROP": "Bu dropun süresi dolmuş ya da artık geçerli değil."
-  ,"DROP_CLAIMED": "Geç kaldın. Bu dropu başka biri kaptı."
-  ,"OPEN_XP_DROP": "🎉 <@{user}> kutuyu açtı ve **{amount} XP** kazandı!"
-  ,"PROMO_DROP_SERVER": "🎉 <@{user}> droptan **{item}** kazandı! Kod DM üzerinden gönderildi."
-  ,"PROMO_DROP_DM": "🎉 **Tebrikler!** Sunucudaki droptan **{item}** promo kodu kazandın.\nKodun burada: `{code}`"
-  ,"PROMO_DROP_DM_OFF": "🎉 <@{user}> droptan **{item}** kazandı, ancak DM kutusu kapalı olduğu için kodu iletemedim. Lütfen DM kutunu açıp yetkililere ulaş."
-  ,"PROMO_CODE_FALLBACK": "Promo Kod"
-  ,"COIN_DROP": "🎉 <@{user}> kutuyu açtı ve **{amount} Coin** kazandı!"
-  ,"DROP_OPEN_TITLE": "📦 Kutu Açıldı!"
-  ,"CMD_NAME_ADMINDROP": "admindrop"
-  ,"CMD_DESC_ADMINDROP": "Bulunulan kanala gizemli bir kutu düşürür."
-  ,"ADMINDROP_OPTION_TYPE": "Kutunun içinden ne çıksın?"
-  ,"ADMINDROP_OPTION_VALUE": "Miktar (örnek: 250) ya da promo kodun kendisi"
-  ,"ADMINDROP_OPTION_ITEMNAME": "Kodun ne için olduğunu belirtir (sadece promo)"
-  ,"ADMINDROP_MISSING_FIELDS": "Drop türü ve değeri zorunludur."
-  ,"ADMINDROP_INVALID_TYPE": "Geçersiz bir drop türü seçildi."
-  ,"ADMINDROP_INVALID_AMOUNT": "XP veya Coin dropu için 0'dan büyük geçerli bir miktar gir."
-  ,"ADMINDROP_SUCCESS": "✅ Drop başarıyla kanala bırakıldı."
-  ,"CMD_NAME_DROPSYSTEM": "dropayar"
-  ,"CMD_DESC_DROPSYSTEM": "Sunucudaki otomatik gizemli kutu sistemini açar veya kapatır."
-  ,"DROPSYSTEM_OPTION_STATUS": "Droplar sohbete otomatik olarak düşsün mü?"
-  ,"DROPSYSTEM_MISSING_STATUS": "Lütfen bir durum belirt. Örnek: `!dropayar aç` veya `!dropayar kapat`."
-  ,"DROPSYSTEM_INVALID_STATUS": "Geçersiz durum. Lütfen sadece `aç` veya `kapat` kullan."
-  ,"DROPSYSTEM_GUILD_ERROR": "Bu komut için sunucu bilgisi belirlenemedi."
-  ,"DROPSYSTEM_TITLE": "🎁 Drop Sistemi Ayarları"
-  ,"DROPSYSTEM_UPDATED": "Sunucunun organik drop sistemi başarıyla güncellendi.\n\n**Yeni Durum:** {status}"
-  ,"DROPSYSTEM_ENABLED_STATUS": "✅ **Aktif!** Sohbet hareketliliğine göre günde en fazla 2 gizemli kutu düşebilir."
-  ,"DROPSYSTEM_DISABLED_STATUS": "❌ **Kapalı.** Organik droplar durduruldu. Adminler yine `/admindrop` kullanabilir."
-  ,"DROPSYSTEM_SAVE_ERROR": "Ayar kaydedilirken bir veritabanı hatası oluştu."
+  "MOVE_CLEANSE_DEBUFFS": "💧 **{player}** Ters Lanetli Teknik ile tüm zayıflatmalardan arındı!",
+  "ITEM_FALLBACK": "Eşya",
+  "DUEL_BROKEN_ITEMS": "⚠️ <@{user}>, savaşın şiddetinden dolayı şu eşyaların kırıldı/tükendi: **{items}**",
+  "UNKNOWN_ITEM": "Bilinmeyen Eşya",
+  "EQUIPPED_BADGE": "Takılı",
+  "PAGE_TEXT": "Sayfa {current} / {total}",
+  "COIN": "Coin",
+  "HP": "Can",
+  "SERVER_INFO_ERROR": "Sunucu bilgisi alınamadı.",
+  "SI_ID": "ID",
+  "SI_TOTAL": "Toplam",
+  "SI_HUMANS": "İnsan",
+  "SI_BOTS": "Bot",
+  "SI_TEXT_CHANNELS": "Yazı",
+  "SI_VOICE_CHANNELS": "Ses",
+  "SI_CATEGORY_CHANNELS": "Kategori",
+  "SI_BOOST": "Boost",
+  "SI_LEVEL": "Seviye",
+  "SI_BOOST_COUNT": "Boost Sayısı", 
+  "STATS_LIBRARY": "Kütüphane",
+  "WARN_USER_LABEL": "Kullanıcı",
+  "WARN_TOTAL_LABEL": "Toplam",
+  "WARN_MOD_LABEL": "Mod",
+  "WARN_REASON_LABEL": "Sebep",
+  "DUEL_VS": "VS",
+  "DUEL_HP_SHORT": "Can",
+  "DUEL_MP_SHORT": "MP",
+  "DUEL_PLAYER_ONE": "OYUNCU 1",
+  "DUEL_PLAYER_TWO": "OYUNCU 2",
+  "WELCOME_CARD_TITLE": "HOŞGELDİN",
+  "GOODBYE_CARD_TITLE": "GÜLE GÜLE",
+  "WELCOME_CARD_COUNT": "Seninle birlikte {count} kişi olduk!",
+  "GOODBYE_CARD_COUNT": "Sensiz {count} kişi kaldık...",
+  "STORE_VOTE_CHECK_ERROR": "Sistemsel bir hata oluştu. Lütfen yapımcıya bildir.",
+  "LEVEL_DM_PREFIX": "**{guild}** Sunucusundaki Seviyen:\n{text}",
+  "DUEL_RANK_UP": "🎉 **Rütbe atladın!** Yeni rütben: **{rank}** 🛡️ *(Kalkan aktif!)*",
+  "DUEL_SHIELD_BROKEN": "🛡️ 💥 <@{user}> **Kalkanın kırıldı!** Bir sonraki mağlubiyetinde rütben düşecek.",
+  "DUEL_RANK_DOWN": "📉 <@{user}> **Rütben düştü.** Yeni rütben: **{rank}**",
+  "RANK_UNRANKED": "Rütbesiz",
+  "RANK_BAG": "Poşet",
+  "RANK_PLASTIC": "Plastik",
+  "RANK_COPPER": "Bakır",
+  "RANK_IRON": "Demir",
+  "RANK_BRONZE": "Bronz",
+  "RANK_SILVER": "Gümüş",
+  "RANK_GOLD": "Altın",
+  "RANK_PLATINUM": "Platin",
+  "RANK_DIAMOND": "Elmas",
+  "RANK_EMERALD": "Zümrüt",
+  "DROP_TITLE": "🎁 Gizemli Bir Kutu Düştü!",
+  "DROP_DESCRIPTION": "Kutuyu açmak için aşağıdaki butona ilk sen bas. İçinden ne çıkacağı tamamen sürpriz...",
+  "DROP_OPEN": "Aç!",
+  "NOT_RECEIVED_DROP_TITLE": "💨 Drop Kayboldu!",
+  "NOT_RECEIVED_DROP_DESCRIPTION": "Kimse kutuyu zamanında açmadığı için rüzgara karışıp yok oldu.",
+  "NO_DROP": "Bu dropun süresi dolmuş ya da artık geçerli değil.",
+  "DROP_CLAIMED": "Geç kaldın. Bu dropu başka biri kaptı.",
+  "OPEN_XP_DROP": "🎉 <@{user}> kutuyu açtı ve **{amount} XP** kazandı!",
+  "PROMO_DROP_SERVER": "🎉 <@{user}> droptan **{item}** kazandı! Kod DM üzerinden gönderildi.",
+  "PROMO_DROP_DM": "🎉 **Tebrikler!** Sunucudaki droptan **{item}** promo kodu kazandın.\nKodun burada: `{code}`",
+  "PROMO_DROP_DM_OFF": "🎉 <@{user}> droptan **{item}** kazandı, ancak DM kutusu kapalı olduğu için kodu iletemedim. Lütfen DM kutunu açıp yetkililere ulaş.",
+  "PROMO_CODE_FALLBACK": "Promo Kod",
+  "COIN_DROP": "🎉 <@{user}> kutuyu açtı ve **{amount} Coin** kazandı!",
+  "DROP_OPEN_TITLE": "📦 Kutu Açıldı!",
+  "CMD_NAME_ADMINDROP": "admindrop",
+  "CMD_DESC_ADMINDROP": "Bulunulan kanala gizemli bir kutu düşürür.",
+  "ADMINDROP_OPTION_TYPE": "Kutunun içinden ne çıksın?",
+  "ADMINDROP_OPTION_VALUE": "Miktar (örnek: 250) ya da promo kodun kendisi",
+  "ADMINDROP_OPTION_ITEMNAME": "Kodun ne için olduğunu belirtir (sadece promo)",
+  "ADMINDROP_MISSING_FIELDS": "Drop türü ve değeri zorunludur.",
+  "ADMINDROP_INVALID_TYPE": "Geçersiz bir drop türü seçildi.",
+  "ADMINDROP_INVALID_AMOUNT": "XP veya Coin dropu için 0'dan büyük geçerli bir miktar gir.",
+  "ADMINDROP_SUCCESS": "✅ Drop başarıyla kanala bırakıldı.",
+  "CMD_NAME_DROPSYSTEM": "dropayar",
+  "CMD_DESC_DROPSYSTEM": "Sunucudaki otomatik gizemli kutu sistemini açar veya kapatır.",
+  "DROPSYSTEM_OPTION_STATUS": "Droplar sohbete otomatik olarak düşsün mü?", 
+  "DROPSYSTEM_MISSING_STATUS": "Lütfen bir durum belirt. Örnek: `!dropayar aç` veya `!dropayar kapat`.",
+  "DROPSYSTEM_INVALID_STATUS": "Geçersiz durum. Lütfen sadece `aç` veya `kapat` kullan.",
+  "DROPSYSTEM_GUILD_ERROR": "Bu komut için sunucu bilgisi belirlenemedi.",
+  "DROPSYSTEM_TITLE": "🎁 Drop Sistemi Ayarları",
+  "DROPSYSTEM_UPDATED": "Sunucunun organik drop sistemi başarıyla güncellendi.\n\n**Yeni Durum:** {status}",
+  "DROPSYSTEM_ENABLED_STATUS": "✅ **Aktif!** Sohbet hareketliliğine göre günde en fazla 2 gizemli kutu düşebilir.",
+  "DROPSYSTEM_DISABLED_STATUS": "❌ **Kapalı.** Organik droplar durduruldu. Adminler yine `/admindrop` kullanabilir.",
+  "DROPSYSTEM_SAVE_ERROR": "Ayar kaydedilirken bir veritabanı hatası oluştu.",
+  "CMD_NAME_SETXPMULTIPLIER": "setxpmultiplier",
+  "CMD_DESC_SETXPMULTIPLIER": "Sunucuya özel XP kazanım çarpanını ayarlar.",
+  "SETXPMULTIPLIER_OPTION_VALUE": "XP çarpanı (örnek: 1.5 veya 2.0)",
+  "SETXPMULTIPLIER_INVALID": "Bu sunucu için geçerli bir XP çarpanı okunamadı.",
+  "SETXPMULTIPLIER_TITLE": "📈 XP Çarpanı Güncellendi",
+  "SETXPMULTIPLIER_UPDATED": "Bu sunucudaki XP çarpanı **{multiplier}x** olarak ayarlandı.\nKullanıcılar artık **{multiplier}x** XP kazanacak.",
+  "CMD_NAME_SETLEVELROLE": "setlevelrole",
+  "CMD_DESC_SETLEVELROLE": "Belirli bir seviye için otomatik verilecek rolü ekler veya günceller.",
+  "SETLEVELROLE_OPTION_LEVEL": "Rolün verileceği seviye",
+  "SETLEVELROLE_OPTION_ROLE": "Verilecek rol",
+  "SETLEVELROLE_INVALID": "Bu sunucu için geçerli bir seviye rolü ayarı okunamadı.",
+  "SETLEVELROLE_TITLE": "🏅 Seviye Rolü Güncellendi",
+  "SETLEVELROLE_UPDATED": "Bir kullanıcı **Level {level}** olduğunda otomatik olarak <@&{role}> rolünü alacak.",
+  "CMD_NAME_SETLEVELCHANNEL": "setlevelchannel",
+  "CMD_DESC_SETLEVELCHANNEL": "Seviye atlama mesajlarının gönderileceği kanalı ayarlar.",
+  "SETLEVELCHANNEL_OPTION_CHANNEL": "Seviye atlama mesajlarının gönderileceği yazı kanalı. Sıfırlamak için boş bırak.",
+  "SETLEVELCHANNEL_INVALID": "Bu komut için geçerli bir sunucu belirlenemedi.",
+  "SETLEVELCHANNEL_TITLE": "💬 Level Log Kanalı",
+  "SETLEVELCHANNEL_STATUS_SET": "Seviye atlama mesajları artık <#{channel}> kanalına gönderilecek.",
+  "SETLEVELCHANNEL_STATUS_RESET": "Seviye atlama kanalı sıfırlandı. Tebrik mesajları artık kullanıcılara **DM** üzerinden gönderilecek."
 }

@@ -24,12 +24,12 @@
     "multilingual"
   ],
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
-    "@napi-rs/canvas": "^0.1.92",
-    "axios": "^1.13.5",
-    "dotenv": "^17.2.4",
+    "@google/genai": "^2.0.0",
+    "@napi-rs/canvas": "^1.0.0",
+    "axios": "1.15.2",
+    "dotenv": "^17.4.2",
     "eris": "^0.18.0",
-    "mongoose": "^9.2.1"
+    "mongoose": "^9.6.1"
   },
   "devDependencies": {
     "eslint": "^9.0.0",
