@@ -248,10 +248,13 @@ module.exports = {
                     ? translate("DUEL_GAME_OVER", lang, { winner: gameInstance.getPlayer(gameInstance.turn).id })
                     : translate("DUEL_TURN_MSG", lang, { player: currentPlayer.id, log: logText });
 
+                const turnUser = `<@${currentPlayer.id}>`;
+
                 return {
-                    content: contentText,
+                    content: turnUser,
                     file: { file: buffer, name: "duel.png" },
                     embed: {
+                        description: contentText,
                         image: { url: "attachment://duel.png" },
                         color: 0x2f3136,
                     },

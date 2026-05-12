@@ -42,6 +42,7 @@ Visually, **Eris** kütüphanesi üzerine inşa edilmiş; modern, çok dilli (TR
    ```
 3. **Ortam değişkenlerini (.env) ayarlayın:**
    ```TOKEN=
+   TOKEN=
    MONGO_URI=
    PREFIX=
    IMGUR_API_KEY=
@@ -49,7 +50,10 @@ Visually, **Eris** kütüphanesi üzerine inşa edilmiş; modern, çok dilli (TR
    OPENWEATHER_API_KEY=
    WEATHERBIT_API_KEY=
    GEMINI_API_KEY=
-   OWNER_ID
+   OWNER_ID=
+   TOPGG_WEBHOOK_AUTH=
+   TOPGG_WEBHOOK_PORT=
+   TOPGG_WEBHOOK_PATH=
    ```
 4. **Botu başlatın:**
    ```bash

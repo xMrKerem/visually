@@ -16,7 +16,7 @@ const BADGE_ICONS = [
 ];
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-const scale = 4
+const scale = 2
 
 const drawRoundedRect = (ctx, x, y, width, height, radius) => {
     const safeRadius = Math.min(radius, width / 2, height / 2);

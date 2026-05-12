@@ -80,7 +80,10 @@ module.exports = {
                 if (msgOrInteraction.createFollowup) {
                     return await msgOrInteraction.createFollowup(payload, file);
                 } else {
-                    return await bot.createMessage(msgOrInteraction.channel.id, payload, file);
+                    const messagePayload = { ...payload };
+                    const messageFile = file || messagePayload.file;
+                    if (messagePayload.file) delete messagePayload.file;
+                    return await bot.createMessage(msgOrInteraction.channel.id, messagePayload, messageFile);
                 }
             } catch (e) {
                 console.error("Mesaj gönderme hatası:", e);
@@ -103,7 +106,13 @@ module.exports = {
         const buffer = await CanvasUtil.drawProfile(targetUser, userData, serverLevelData, nextLevelXp, canvasTexts);
 
         return reply(
-            { content: translate("PROFILE_HEADER", lang, { user: targetUser.username }) },
+            {
+                embed: {
+                    description: translate("PROFILE_HEADER", lang, { user: targetUser.username }),
+                    image: { url: "attachment://profile.png" },
+                    color: 0x2f3136,
+                }
+            },
             { file: buffer, name: "profile.png" }
         );
     }
