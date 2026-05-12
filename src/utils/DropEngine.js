@@ -1,5 +1,4 @@
 const User = require('../database/models/User');
-const ServerLevel = require('../database/models/ServerLevel');
 const translate = require('./Translate');
 
 const activeDrops = new Map();
@@ -78,14 +77,18 @@ module.exports = {
         
         try {
             if (dropData.type === "xp") {
-                const serverLevel = await ServerLevel.findOneAndUpdate(
-                    { userId, guildId },
-                    { $setOnInsert: { level: 1 } },
-                    { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
-                );
+                const LevelSystem = require("./LevelSystem");
+                const memberRoles = interaction.member?.roles || [];
 
-                serverLevel.xp += Number(dropData.value)
-                await serverLevel.save();
+                await LevelSystem.addServerXp(bot, {
+                    guildId,
+                    guildName: interaction.channel.guild?.name || interaction.guildID,
+                    userId,
+                    guildData,
+                    amount: Number(dropData.value),
+                    memberRoles
+                });
+
                 resultMessage = translate("OPEN_XP_DROP", lang, {
                     user: userId,
                     amount: dropData.value

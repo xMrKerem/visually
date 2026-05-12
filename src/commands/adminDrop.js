@@ -27,7 +27,6 @@ module.exports = {
                 required: true,
                 choices: [
                     { name: "XP", value: "xp" },
-                    { name: "Coin", value: "coin" },
                     { name: "Promo Code", value: "promo", name_localizations: { tr: "Promo Kod" } }
                 ]
             },
@@ -46,6 +45,15 @@ module.exports = {
                 description_localizations: getLocalization("ADMINDROP_OPTION_ITEMNAME"),
                 type: 3,
                 required: false
+            },
+            {
+                name: "channel",
+                name_localizations: { tr: "kanal" },
+                description: en.ADMINDROP_OPTION_CHANNEL,
+                description_localizations: getLocalization("ADMINDROP_OPTION_CHANNEL"),
+                type: 7,
+                channel_types: [0],
+                required: false
             }
         ]
     },
@@ -61,6 +69,7 @@ module.exports = {
         const type = options.find((option) => option.name === "type")?.value || null;
         const value = options.find((option) => option.name === "value")?.value || null;
         const itemName = options.find((option) => option.name === "itemname")?.value || null;
+        const channelId = options.find((option) => option.name === "channel")?.value || msgOrInteraction.channel.id;
 
         if (!type || !value) {
             return msgOrInteraction.createMessage({
@@ -69,7 +78,7 @@ module.exports = {
             });
         }
 
-        if (!["xp", "coin", "promo"].includes(type)) {
+        if (!["xp", "promo"].includes(type)) {
             return msgOrInteraction.createMessage({
                 content: translate("ADMINDROP_INVALID_TYPE", lang),
                 flags: 64
@@ -77,7 +86,7 @@ module.exports = {
         }
 
         let parsedValue = value;
-        if (type === "xp" || type === "coin") {
+        if (type === "xp") {
             parsedValue = Number(value);
 
             if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
@@ -90,14 +99,14 @@ module.exports = {
             parsedValue = Math.floor(parsedValue);
         }
 
-        await DropEngine.spawnDrop(bot, msgOrInteraction.channel.id, {
+        await DropEngine.spawnDrop(bot, channelId, {
             type,
             value: parsedValue,
             itemName
         }, lang);
 
         return msgOrInteraction.createMessage({
-            content: translate("ADMINDROP_SUCCESS", lang),
+            content: translate("ADMINDROP_SUCCESS", lang, { channel: channelId }),
             flags: 64
         });
     }

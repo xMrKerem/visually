@@ -1,4 +1,5 @@
 const Guild = require("../database/models/Guild");
+const DropEngine = require("../utils/DropEngine");
 
 module.exports = {
     execute: async (bot, interaction) => {
@@ -12,7 +13,15 @@ module.exports = {
 
         if (interaction.type === 2) {
             const cmdName = interaction.data.name;
-            const cmd = bot.commands.get(cmdName);
+            let cmd = bot.commands.get(cmdName);
+
+            if (!cmd && bot.aliases?.has(cmdName)) {
+                cmd = bot.commands.get(bot.aliases.get(cmdName));
+            }
+
+            if (!cmd) {
+                cmd = [...bot.commands.values()].find((command) => command.slashCommand?.name === cmdName);
+            }
 
             if (!cmd) return;
 
@@ -32,6 +41,18 @@ module.exports = {
         }
 
         if (interaction.type === 3) {
+            try {
+                await DropEngine.handleInteraction(bot, interaction, guildData);
+            } catch (err) {
+                console.error(`BileÅŸen HatasÄ± (${interaction.data?.custom_id || "unknown"}):`, err);
+
+                if (!interaction.acknowledged) {
+                    return interaction.createMessage({
+                        content: "EtkileÅŸim iÅŸlenirken bir hata oluÅŸtu.",
+                        flags: 64
+                    });
+                }
+            }
         }
     }
 };
